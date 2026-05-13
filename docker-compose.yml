@@ -1,0 +1,136 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-themis}
+      POSTGRES_USER: ${POSTGRES_USER:-themis}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-themis}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-themis}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-themis}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-themis}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-themis-local-password}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  api:
+    build:
+      context: ./apps/api
+    environment:
+      ENVIRONMENT: ${ENVIRONMENT:-local}
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://themis:themis@db:5432/themis}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      RABBITMQ_URL: ${RABBITMQ_URL:-amqp://themis:themis@rabbitmq:5672//}
+      OBJECT_STORAGE_ENDPOINT: ${OBJECT_STORAGE_ENDPOINT:-http://minio:9000}
+      OBJECT_STORAGE_BUCKET: ${OBJECT_STORAGE_BUCKET:-themis-documents}
+      OBJECT_STORAGE_REGION: ${OBJECT_STORAGE_REGION:-ap-south-1}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./apps/api:/app
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: ./apps/api
+    environment:
+      ENVIRONMENT: ${ENVIRONMENT:-local}
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://themis:themis@db:5432/themis}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      RABBITMQ_URL: ${RABBITMQ_URL:-amqp://themis:themis@rabbitmq:5672//}
+      OBJECT_STORAGE_ENDPOINT: ${OBJECT_STORAGE_ENDPOINT:-http://minio:9000}
+      OBJECT_STORAGE_BUCKET: ${OBJECT_STORAGE_BUCKET:-themis-documents}
+      OBJECT_STORAGE_REGION: ${OBJECT_STORAGE_REGION:-ap-south-1}
+    command: celery -A app.tasks.celery_app.celery_app worker --loglevel=INFO
+    volumes:
+      - ./apps/api:/app
+    depends_on:
+      api:
+        condition: service_started
+
+  beat:
+    build:
+      context: ./apps/api
+    environment:
+      ENVIRONMENT: ${ENVIRONMENT:-local}
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://themis:themis@db:5432/themis}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      RABBITMQ_URL: ${RABBITMQ_URL:-amqp://themis:themis@rabbitmq:5672//}
+      OBJECT_STORAGE_ENDPOINT: ${OBJECT_STORAGE_ENDPOINT:-http://minio:9000}
+      OBJECT_STORAGE_BUCKET: ${OBJECT_STORAGE_BUCKET:-themis-documents}
+      OBJECT_STORAGE_REGION: ${OBJECT_STORAGE_REGION:-ap-south-1}
+    command: celery -A app.tasks.celery_app.celery_app beat --loglevel=INFO
+    volumes:
+      - ./apps/api:/app
+    depends_on:
+      api:
+        condition: service_started
+
+  web:
+    build:
+      context: ./apps/web
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8000}
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./apps/web:/app
+      - web-node-modules:/app/node_modules
+    depends_on:
+      api:
+        condition: service_started
+
+volumes:
+  postgres-data:
+  minio-data:
+  web-node-modules:

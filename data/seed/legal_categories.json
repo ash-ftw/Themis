@@ -1,0 +1,22 @@
+[
+  {
+    "key": "consumer_complaint",
+    "label": "Consumer complaint",
+    "initial_questions": ["purchase_date", "seller_details", "loss_amount", "evidence_available"]
+  },
+  {
+    "key": "cyber_fraud",
+    "label": "Cyber fraud",
+    "initial_questions": ["incident_date", "amount_lost", "digital_evidence", "police_contacted"]
+  },
+  {
+    "key": "domestic_violence",
+    "label": "Domestic violence",
+    "initial_questions": ["physical_harm", "minor_involved", "immediate_safety", "documents_available"]
+  },
+  {
+    "key": "rti_request",
+    "label": "RTI request",
+    "initial_questions": ["public_authority", "information_requested", "time_period"]
+  }
+]
