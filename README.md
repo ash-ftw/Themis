@@ -10,7 +10,7 @@ This repository now contains the initial application scaffold based on the PRD a
 4. SQLAlchemy schema modules aligned with `Themis_Backend_Schema.md`.
 5. Celery task entry points for OCR, PDF exports, notifications, and reminders.
 6. Phase 2 local auth and role scaffolding for protected API/frontend flows.
-7. Phase 3 legal knowledge search and admin content scaffolding.
+7. Phase 3 legal knowledge search and admin content management.
 
 ## Documentation
 
@@ -53,10 +53,9 @@ Create `.env` from `.env.example` only when you need to override the local defau
 
 The implementation should continue in this order:
 
-1. Complete legal knowledge search polish and real seed review.
-2. Assessment and complaint draft generation.
-3. Case and hearing management.
-4. Lawyer verification and legal aid matching.
-5. Document repository and OCR.
-6. RTI generation and notifications.
-7. Admin dashboard, audit logs, metrics, and hardening.
+1. Assessment and complaint draft generation.
+2. Case and hearing management.
+3. Lawyer verification and legal aid matching.
+4. Document repository and OCR.
+5. RTI generation and notifications.
+6. Admin dashboard, audit logs, metrics, and hardening.

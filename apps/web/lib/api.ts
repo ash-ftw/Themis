@@ -27,6 +27,7 @@ export type LawSearchResponse = {
   total: number;
   limit: number;
   offset: number;
+  elapsed_ms: number;
   results: Array<{
     law_section: LawSection;
     rank: number | null;
@@ -129,4 +130,60 @@ export async function getLawSection(authToken: string, sectionId: string) {
   }
 
   return response.json() as Promise<LawSection>;
+}
+
+export async function createLawSection(authToken: string, payload: unknown) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/admin/laws`, {
+    body: JSON.stringify(payload),
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+      "Content-Type": "application/json"
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to create the legal record.");
+  }
+
+  return response.json() as Promise<LawSection>;
+}
+
+export async function updateLawSection(authToken: string, sectionId: string, payload: unknown) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/admin/laws/${sectionId}`, {
+    body: JSON.stringify(payload),
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+      "Content-Type": "application/json"
+    },
+    method: "PUT"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to update the legal record.");
+  }
+
+  return response.json() as Promise<LawSection>;
+}
+
+export async function bookmarkLawSection(authToken: string, sectionId: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/laws/${sectionId}/bookmark`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to bookmark the law section.");
+  }
+
+  return response.json() as Promise<{
+    id: string;
+    law_section_id: string;
+    created_at: string;
+  }>;
 }

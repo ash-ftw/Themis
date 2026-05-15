@@ -76,6 +76,12 @@ Local development auth tokens:
 3. `Authorization: Bearer dev-admin`
 4. `Authorization: Bearer dev:<external_auth_id>:<email>:<role>[:phone]`
 
-Phase 3 legal knowledge and search is now in progress. The backend includes legal search, detail, bookmark, admin create/update endpoints, FTS/trigram migration support, and seed data loading. The frontend includes citizen legal search/detail pages and an admin legal content page.
+Phase 3 legal knowledge and search is implemented. The backend includes legal search, detail, bookmark, admin create/update endpoints, FTS/trigram migration support, and seed data loading. The frontend includes citizen legal search/detail pages, bookmark submission, and an admin legal content table with create/update form.
 
 Phase 4 and later feature endpoints for assessments, cases, documents, legal aid, RTI, and admin workflows should be implemented in the phase order defined by `Themis_Implementation_Plan.md`.
+
+Seed legal sections after migrations:
+
+```powershell
+docker compose run --rm api python scripts/seed_legal_data.py
+```

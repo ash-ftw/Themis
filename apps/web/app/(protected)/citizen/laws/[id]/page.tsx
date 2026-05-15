@@ -4,6 +4,8 @@ import { cookies } from "next/headers";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { getLawSection } from "@/lib/api";
 
+import { bookmarkLawSectionAction } from "./actions";
+
 type Params = Promise<{ id: string }>;
 
 export default async function LawDetailPage({ params }: { params: Params }) {
@@ -42,13 +44,16 @@ export default async function LawDetailPage({ params }: { params: Params }) {
         <p className="mt-2 text-sm text-muted-foreground">{lawSection.act_name}</p>
 
         <div className="mt-5 flex flex-wrap gap-2">
-          <button
-            className="focus-ring inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm font-medium hover:bg-muted"
-            type="button"
-          >
-            <Bookmark aria-hidden="true" className="h-4 w-4" />
-            Bookmark
-          </button>
+          <form action={bookmarkLawSectionAction}>
+            <input name="sectionId" type="hidden" value={lawSection.id} />
+            <button
+              className="focus-ring inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm font-medium hover:bg-muted"
+              type="submit"
+            >
+              <Bookmark aria-hidden="true" className="h-4 w-4" />
+              Bookmark
+            </button>
+          </form>
           {lawSection.source_reference ? (
             <span className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-muted-foreground">
               <ExternalLink aria-hidden="true" className="h-4 w-4" />

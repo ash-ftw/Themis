@@ -66,6 +66,7 @@ class LawSearchResponse(BaseModel):
     total: int
     limit: int
     offset: int
+    elapsed_ms: float
     results: list[LawSearchResult]
 
 

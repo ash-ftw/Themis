@@ -1,15 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { syncProfile } from "@/lib/api";
 import { isAppRole, roleHome } from "@/lib/auth";
 
 const maxAge = 60 * 60 * 8;
 
-export function GET(request: NextRequest) {
+export async function GET(request: NextRequest) {
   const requestedRole = request.nextUrl.searchParams.get("role") ?? undefined;
   const role = isAppRole(requestedRole) ? requestedRole : "citizen";
+  const authToken = `dev-${role}`;
+
+  await syncProfile(authToken, {}).catch(() => null);
+
   const response = NextResponse.redirect(new URL(roleHome[role], request.url));
 
-  response.cookies.set("themis-session", `dev-${role}`, {
+  response.cookies.set("themis-session", authToken, {
     maxAge,
     path: "/",
     sameSite: "lax"

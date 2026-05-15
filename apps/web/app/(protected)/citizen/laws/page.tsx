@@ -91,7 +91,10 @@ export default async function LegalSearchPage({ searchParams }: { searchParams: 
       <section className="rounded-md border border-border bg-white shadow-panel">
         <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3 md:px-5">
           <h2 className="text-base font-semibold">Search results</h2>
-          <StatusBadge>{searchResponse?.total ?? 0} found</StatusBadge>
+          <div className="flex items-center gap-2">
+            <StatusBadge>{searchResponse?.total ?? 0} found</StatusBadge>
+            <StatusBadge tone="primary">{searchResponse?.elapsed_ms ?? 0} ms</StatusBadge>
+          </div>
         </div>
         <div className="divide-y divide-border">
           {searchResponse?.results.length ? (

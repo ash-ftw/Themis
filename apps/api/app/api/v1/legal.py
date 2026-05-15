@@ -1,4 +1,5 @@
 from datetime import UTC, datetime
+from time import perf_counter
 from typing import Annotated, Any
 from uuid import UUID
 
@@ -39,6 +40,7 @@ def search_laws(
     limit: Annotated[int, Query(ge=1, le=50)] = 20,
     offset: Annotated[int, Query(ge=0)] = 0,
 ) -> LawSearchResponse:
+    started_at = perf_counter()
     base_stmt = _filtered_law_query(
         q=q,
         act_name=act_name,
@@ -66,6 +68,7 @@ def search_laws(
         total=total,
         limit=limit,
         offset=offset,
+        elapsed_ms=round((perf_counter() - started_at) * 1000, 3),
         results=[
             LawSearchResult(
                 law_section=LawSectionResponse.model_validate(row[0]),
