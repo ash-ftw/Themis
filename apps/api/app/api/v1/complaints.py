@@ -17,7 +17,7 @@ from app.domain.assessment_rules import build_complaint_draft
 from app.models.assessment import AssessmentSession, ComplaintDraft
 from app.models.case import Case
 from app.models.document import Document
-from app.models.enums import DraftStatus, UserRole
+from app.models.enums import CaseStatus, DraftStatus, UserRole
 from app.schemas.assessment import (
     CaseSummaryResponse,
     ComplaintDraftResponse,
@@ -27,6 +27,7 @@ from app.schemas.assessment import (
     SaveAssessmentToCaseRequest,
 )
 from app.services.audit import record_audit_log
+from app.services.timeline import add_case_timeline_event
 from app.tasks.exports import render_pdf_export
 
 router = APIRouter(prefix="/complaints", tags=["complaint drafts"])
@@ -186,6 +187,7 @@ def save_complaint_to_case(
     case = _case_for_draft(db, draft, citizen.id)
     draft.case_id = case.id
     draft.status = DraftStatus.SAVED_TO_CASE
+    case.status = CaseStatus.COMPLAINT_PREPARED
     _document_for_draft(
         db,
         draft=draft,
@@ -195,6 +197,14 @@ def save_complaint_to_case(
         document_type="complaint_draft",
     )
     db.flush()
+    add_case_timeline_event(
+        db,
+        case_id=case.id,
+        actor_id=citizen.id,
+        event_type="complaint.saved_to_case",
+        title="Complaint draft saved to case",
+        metadata={"draft_id": str(draft.id)},
+    )
     record_audit_log(
         db,
         actor_id=citizen.id,

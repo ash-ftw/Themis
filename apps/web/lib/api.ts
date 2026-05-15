@@ -96,6 +96,81 @@ export type ComplaintDraft = {
   updated_at: string;
 };
 
+export type CaseUrgency = "low" | "medium" | "high" | "emergency";
+
+export type CaseStatus =
+  | "draft"
+  | "assessment_completed"
+  | "complaint_prepared"
+  | "complaint_submitted"
+  | "fir_filed"
+  | "under_investigation"
+  | "legal_aid_requested"
+  | "lawyer_assigned"
+  | "in_court"
+  | "hearing_scheduled"
+  | "awaiting_order"
+  | "closed"
+  | "archived";
+
+export type CaseRecord = {
+  id: string;
+  citizen_id: string;
+  lawyer_id: string | null;
+  title: string;
+  category: string;
+  state: string;
+  district: string;
+  urgency: CaseUrgency;
+  fir_number: string | null;
+  police_station: string | null;
+  court_name: string | null;
+  case_number: string | null;
+  status: CaseStatus;
+  sections: string[];
+  description: string;
+  metadata: Record<string, unknown>;
+  archived_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type CaseListResponse = {
+  total: number;
+  limit: number;
+  offset: number;
+  results: CaseRecord[];
+};
+
+export type CaseTimelineEvent = {
+  id: string;
+  case_id: string;
+  actor_id: string | null;
+  event_type: string;
+  title: string;
+  description: string | null;
+  metadata: Record<string, unknown>;
+  created_at: string;
+};
+
+export type HearingRecord = {
+  id: string;
+  case_id: string;
+  hearing_date: string;
+  hearing_time: string | null;
+  court: string;
+  court_room: string | null;
+  judge: string | null;
+  purpose: string;
+  outcome: string | null;
+  next_date: string | null;
+  notes: string | null;
+  added_by: string;
+  reminder_status: string;
+  created_at: string;
+  updated_at: string;
+};
+
 export async function getHealth() {
   const response = await fetch(`${apiBaseUrl}/health`, {
     cache: "no-store"
@@ -445,4 +520,222 @@ export async function saveComplaintToCase(authToken: string, draftId: string) {
   }
 
   return response.json();
+}
+
+export async function listCases(
+  authToken: string,
+  params: {
+    case_status?: string;
+    include_archived?: string;
+    limit?: string;
+    offset?: string;
+  } = {}
+) {
+  const query = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value) {
+      query.set(key, value);
+    }
+  });
+
+  const response = await fetch(`${apiBaseUrl}/api/v1/cases?${query.toString()}`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to load cases.");
+  }
+
+  return response.json() as Promise<CaseListResponse>;
+}
+
+export async function listAssignedCases(authToken: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/lawyers/assigned-cases`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to load assigned cases.");
+  }
+
+  return response.json() as Promise<CaseListResponse>;
+}
+
+export async function createCase(authToken: string, payload: unknown) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/cases`, {
+    body: JSON.stringify(payload),
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+      "Content-Type": "application/json"
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to create the case.");
+  }
+
+  return response.json() as Promise<CaseRecord>;
+}
+
+export async function getCase(authToken: string, caseId: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/cases/${caseId}`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to load the case.");
+  }
+
+  return response.json() as Promise<CaseRecord>;
+}
+
+export async function updateCase(authToken: string, caseId: string, payload: unknown) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/cases/${caseId}`, {
+    body: JSON.stringify(payload),
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+      "Content-Type": "application/json"
+    },
+    method: "PATCH"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to update the case.");
+  }
+
+  return response.json() as Promise<CaseRecord>;
+}
+
+export async function archiveCase(authToken: string, caseId: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/cases/${caseId}`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    },
+    method: "DELETE"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to archive the case.");
+  }
+
+  return response.json() as Promise<CaseRecord>;
+}
+
+export async function getCaseTimeline(authToken: string, caseId: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/cases/${caseId}/timeline`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to load the case timeline.");
+  }
+
+  return response.json() as Promise<{
+    case_id: string;
+    events: CaseTimelineEvent[];
+  }>;
+}
+
+export async function listHearings(authToken: string, caseId: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/cases/${caseId}/hearings`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to load hearings.");
+  }
+
+  return response.json() as Promise<{
+    case_id: string;
+    hearings: HearingRecord[];
+  }>;
+}
+
+export async function createHearing(authToken: string, caseId: string, payload: unknown) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/cases/${caseId}/hearings`, {
+    body: JSON.stringify(payload),
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+      "Content-Type": "application/json"
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to create the hearing.");
+  }
+
+  return response.json() as Promise<HearingRecord>;
+}
+
+export async function updateHearing(authToken: string, hearingId: string, payload: unknown) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/hearings/${hearingId}`, {
+    body: JSON.stringify(payload),
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+      "Content-Type": "application/json"
+    },
+    method: "PATCH"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to update the hearing.");
+  }
+
+  return response.json() as Promise<HearingRecord>;
+}
+
+export async function deleteHearing(authToken: string, hearingId: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/hearings/${hearingId}`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    },
+    method: "DELETE"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to delete the hearing.");
+  }
+}
+
+export async function scheduleHearingReminders(authToken: string, hearingId: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/hearings/${hearingId}/schedule-reminders`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to schedule hearing reminders.");
+  }
+
+  return response.json() as Promise<{
+    hearing: HearingRecord;
+    status: string;
+    reminder_key: string;
+  }>;
 }

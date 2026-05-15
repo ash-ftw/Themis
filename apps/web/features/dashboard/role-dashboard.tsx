@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import { StatusBadge } from "@/components/ui/status-badge";
+import type { CaseRecord } from "@/lib/api";
 
 const activeCases = [
   {
@@ -16,14 +17,16 @@ const activeCases = [
     category: "Consumer",
     status: "Complaint prepared",
     next: "Legal aid request pending",
-    tone: "warning" as const
+    tone: "warning" as const,
+    href: "/citizen/cases"
   },
   {
     title: "RTI for municipal records",
     category: "RTI",
     status: "Draft",
     next: "Export PDF",
-    tone: "neutral" as const
+    tone: "neutral" as const,
+    href: "/citizen/cases"
   }
 ];
 
@@ -42,7 +45,18 @@ const adminSignals = [
   { label: "Reviewed law sections", value: "126", tone: "success" as const }
 ];
 
-export function RoleDashboard() {
+export function RoleDashboard({ cases = [] }: { cases?: CaseRecord[] }) {
+  const displayedCases = cases.length
+    ? cases.slice(0, 4).map((caseRecord) => ({
+        title: caseRecord.title,
+        category: caseRecord.category,
+        status: caseRecord.status.replaceAll("_", " "),
+        next: `${caseRecord.district}, ${caseRecord.state}`,
+        tone: caseRecord.urgency === "emergency" ? ("danger" as const) : ("primary" as const),
+        href: `/citizen/cases/${caseRecord.id}`
+      }))
+    : activeCases;
+
   return (
     <div className="mx-auto max-w-7xl space-y-6">
       <section className="grid gap-4 lg:grid-cols-[1.4fr_0.8fr]">
@@ -110,7 +124,7 @@ export function RoleDashboard() {
             <h2 className="text-base font-semibold">Active cases</h2>
           </div>
           <div className="divide-y divide-border">
-            {activeCases.map((item) => (
+            {displayedCases.map((item) => (
               <div
                 className="grid gap-3 px-4 py-4 md:grid-cols-[1fr_auto] md:items-center md:px-5"
                 key={item.title}
@@ -124,13 +138,13 @@ export function RoleDashboard() {
                 </div>
                 <div className="flex items-center gap-2">
                   <StatusBadge tone={item.tone}>{item.status}</StatusBadge>
-                  <button
+                  <a
                     aria-label={`Open ${item.title}`}
                     className="focus-ring inline-flex h-9 w-9 items-center justify-center rounded-md border border-border hover:bg-muted"
-                    type="button"
+                    href={item.href}
                   >
                     <ArrowRight aria-hidden="true" className="h-4 w-4" />
-                  </button>
+                  </a>
                 </div>
               </div>
             ))}

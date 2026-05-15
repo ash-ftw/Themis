@@ -1,4 +1,3 @@
-from datetime import UTC, datetime
 from typing import Annotated, Any
 from uuid import UUID
 
@@ -13,7 +12,7 @@ from app.domain.assessment_rules import (
     list_categories,
 )
 from app.models.assessment import AssessmentSession
-from app.models.case import Case, CaseTimelineEvent
+from app.models.case import Case
 from app.models.enums import CaseStatus, UserRole
 from app.schemas.assessment import (
     AssessmentAnswerRequest,
@@ -27,6 +26,7 @@ from app.schemas.assessment import (
     SectionSuggestion,
 )
 from app.services.audit import record_audit_log
+from app.services.timeline import add_case_timeline_event
 
 router = APIRouter(prefix="/assessments", tags=["assessments"])
 
@@ -191,16 +191,14 @@ def save_assessment_to_case(
     db.add(case)
     db.flush()
     assessment.case_id = case.id
-    db.add(
-        CaseTimelineEvent(
-            case_id=case.id,
-            actor_id=citizen.id,
-            event_type="assessment_saved",
-            title="Assessment saved to case",
-            description=assessment.result_summary,
-            metadata_json={"assessment_id": str(assessment.id)},
-            created_at=datetime.now(UTC),
-        )
+    add_case_timeline_event(
+        db,
+        case_id=case.id,
+        actor_id=citizen.id,
+        event_type="assessment.saved_to_case",
+        title="Assessment saved to case",
+        description=assessment.result_summary,
+        metadata={"assessment_id": str(assessment.id)},
     )
     record_audit_log(
         db,

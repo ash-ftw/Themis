@@ -80,7 +80,9 @@ Phase 3 legal knowledge and search is implemented. The backend includes legal se
 
 Phase 4 assessment and complaint draft generation is implemented. The backend includes versioned assessment rules, dynamic category questions, start/answer/analyze/get/save-to-case endpoints, complaint draft generate/get/update/export/save-to-case endpoints, export document metadata, and audit logging. The frontend includes a guided assessment form, result page with disclaimers, possible section suggestions with confidence labels, evidence checklists, manual complaint creation, editable draft preview, PDF export action, and save-to-case action.
 
-Phase 5 and later feature endpoints for full case and hearing management, documents, legal aid, RTI, and admin workflows should be implemented in the phase order defined by `Themis_Implementation_Plan.md`.
+Phase 5 case and hearing management is implemented. The backend includes case CRUD, hearing CRUD, timeline event helpers, hearing reminder scheduling hooks, citizen ownership checks, lawyer assigned-case access checks, and case/hearing indexes. The frontend includes citizen case summary, case list/create/detail pages, hearing forms, timeline display, and lawyer assigned-case list/detail pages.
+
+Phase 6 and later feature endpoints for lawyer verification, legal aid matching, documents, RTI, and admin workflows should be implemented in the phase order defined by `Themis_Implementation_Plan.md`.
 
 Seed legal sections after migrations:
 

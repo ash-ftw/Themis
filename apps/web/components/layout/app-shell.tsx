@@ -1,6 +1,7 @@
 import {
   Bell,
   BookOpen,
+  BriefcaseBusiness,
   ClipboardCheck,
   FileText,
   LayoutDashboard,
@@ -18,6 +19,7 @@ const navigation: Array<{
   roles: AppRole[];
 }> = [
   { label: "Dashboard", href: "/citizen/dashboard", icon: LayoutDashboard, roles: ["citizen"] },
+  { label: "Cases", href: "/citizen/cases", icon: BriefcaseBusiness, roles: ["citizen"] },
   { label: "Law Search", href: "/citizen/laws", icon: Search, roles: ["citizen"] },
   {
     label: "Assessment",
@@ -28,6 +30,7 @@ const navigation: Array<{
   { label: "Complaint", href: "/citizen/complaints/new", icon: FileText, roles: ["citizen"] },
   { label: "Profile", href: "/citizen/profile", icon: UserRoundCheck, roles: ["citizen"] },
   { label: "Dashboard", href: "/lawyer/dashboard", icon: LayoutDashboard, roles: ["lawyer"] },
+  { label: "Assigned Cases", href: "/lawyer/cases", icon: BriefcaseBusiness, roles: ["lawyer"] },
   { label: "Profile", href: "/lawyer/profile", icon: UserRoundCheck, roles: ["lawyer"] },
   { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard, roles: ["admin"] },
   { label: "Law Content", href: "/admin/laws", icon: BookOpen, roles: ["admin"] },
