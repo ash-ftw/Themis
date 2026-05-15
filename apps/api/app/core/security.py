@@ -1,6 +1,6 @@
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Annotated, Protocol
+from typing import Annotated, Any, Protocol
 from uuid import UUID
 
 from fastapi import Depends, Header, HTTPException, status
@@ -93,7 +93,82 @@ class CognitoJwtAuthProvider:
         if not token:
             raise AuthError("Missing JWT.")
 
-        raise AuthError("Cognito JWT validation is not configured for this environment.")
+        if self.settings.auth_issuer is None or self.settings.auth_audience is None:
+            raise AuthError("Cognito issuer and audience must be configured.")
+
+        payload = self._decode_jwt(token)
+        token_use = payload.get("token_use")
+        if token_use != self.settings.auth_token_use:
+            raise AuthError("JWT token_use is not allowed.")
+
+        external_auth_id = payload.get("sub")
+        email = payload.get("email")
+        if not isinstance(external_auth_id, str) or not external_auth_id:
+            raise AuthError("JWT is missing subject.")
+        if not isinstance(email, str) or not email:
+            raise AuthError("JWT is missing email.")
+
+        phone_number = payload.get("phone_number")
+
+        return AuthPrincipal(
+            external_auth_id=external_auth_id,
+            email=email,
+            role=self._role_from_claims(payload),
+            phone=phone_number if isinstance(phone_number, str) else None,
+        )
+
+    def _decode_jwt(self, token: str) -> dict[str, Any]:
+        try:
+            import jwt
+            from jwt import PyJWKClient
+        except ImportError as exc:
+            raise AuthError("PyJWT[crypto] is required for Cognito JWT validation.") from exc
+
+        jwks_client = PyJWKClient(self._jwks_url())
+        try:
+            signing_key = jwks_client.get_signing_key_from_jwt(token)
+            payload = jwt.decode(
+                token,
+                signing_key.key,
+                algorithms=["RS256"],
+                audience=self.settings.auth_audience,
+                issuer=self.settings.auth_issuer,
+                options={"require": ["exp", "iat", "sub", "token_use"]},
+            )
+        except jwt.PyJWTError as exc:
+            raise AuthError("Invalid Cognito JWT.") from exc
+
+        if not isinstance(payload, dict):
+            raise AuthError("Invalid Cognito JWT claims.")
+
+        return payload
+
+    def _jwks_url(self) -> str:
+        if self.settings.auth_jwks_url:
+            return self.settings.auth_jwks_url
+
+        if self.settings.auth_issuer is None:
+            raise AuthError("Cognito issuer must be configured.")
+
+        return f"{self.settings.auth_issuer.rstrip('/')}/.well-known/jwks.json"
+
+    def _role_from_claims(self, payload: dict[str, Any]) -> UserRole:
+        role_claim = payload.get(self.settings.auth_role_claim)
+        if isinstance(role_claim, str):
+            try:
+                return UserRole(role_claim)
+            except ValueError as exc:
+                raise AuthError("JWT role claim is invalid.") from exc
+
+        groups = payload.get("cognito:groups")
+        if isinstance(groups, list):
+            normalized_groups = {group for group in groups if isinstance(group, str)}
+            if self.settings.auth_admin_group in normalized_groups:
+                return UserRole.ADMIN
+            if self.settings.auth_lawyer_group in normalized_groups:
+                return UserRole.LAWYER
+
+        return UserRole.CITIZEN
 
 
 def _auth_exception(detail: str) -> HTTPException:

@@ -29,6 +29,11 @@ class Settings(BaseSettings):
 
     auth_issuer: str | None = None
     auth_audience: str | None = None
+    auth_jwks_url: str | None = None
+    auth_token_use: str = "id"
+    auth_role_claim: str = "custom:role"
+    auth_admin_group: str = "admin"
+    auth_lawyer_group: str = "lawyer"
     local_auth_enabled: bool = True
     admin_bootstrap_emails: list[str] = Field(
         default_factory=lambda: ["admin@themis.local"],

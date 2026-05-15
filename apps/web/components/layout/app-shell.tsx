@@ -1,5 +1,7 @@
 import {
   Bell,
+  BookOpen,
+  FileText,
   LayoutDashboard,
   Search,
   ShieldCheck,
@@ -15,11 +17,14 @@ const navigation: Array<{
   roles: AppRole[];
 }> = [
   { label: "Dashboard", href: "/citizen/dashboard", icon: LayoutDashboard, roles: ["citizen"] },
+  { label: "Law Search", href: "/citizen/laws", icon: Search, roles: ["citizen"] },
   { label: "Profile", href: "/citizen/profile", icon: UserRoundCheck, roles: ["citizen"] },
   { label: "Dashboard", href: "/lawyer/dashboard", icon: LayoutDashboard, roles: ["lawyer"] },
   { label: "Profile", href: "/lawyer/profile", icon: UserRoundCheck, roles: ["lawyer"] },
   { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard, roles: ["admin"] },
-  { label: "Verification", href: "/admin/dashboard", icon: ShieldCheck, roles: ["admin"] }
+  { label: "Law Content", href: "/admin/laws", icon: BookOpen, roles: ["admin"] },
+  { label: "Verification", href: "/admin/dashboard", icon: ShieldCheck, roles: ["admin"] },
+  { label: "Audit Logs", href: "/admin/dashboard", icon: FileText, roles: ["admin"] }
 ];
 
 export function AppShell({

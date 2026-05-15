@@ -67,7 +67,7 @@ Phase 1 foundations from the implementation plan are implemented:
 7. Local Docker Compose services.
 8. Basic CI for API checks, web checks, and Docker Compose config validation.
 
-Phase 2 authentication and roles are now in progress. The backend includes local development bearer tokens, current-user dependencies, role guards, profile sync/update endpoints, and auth/profile audit logging. The frontend includes local role sign-in, protected route middleware, role-aware redirects, profile screens, and a lawyer verification pending state.
+Phase 2 authentication and roles are implemented. The backend includes local development bearer tokens, Cognito JWT/JWKS validation, current-user dependencies, role guards, profile sync/update endpoints, and auth/profile audit logging. The frontend includes local role sign-in, protected route middleware, role-aware redirects, profile screens, and a lawyer verification pending state.
 
 Local development auth tokens:
 
@@ -76,4 +76,6 @@ Local development auth tokens:
 3. `Authorization: Bearer dev-admin`
 4. `Authorization: Bearer dev:<external_auth_id>:<email>:<role>[:phone]`
 
-Phase 3 and later feature endpoints for legal search, assessments, cases, documents, legal aid, RTI, and admin workflows should be implemented in the phase order defined by `Themis_Implementation_Plan.md`.
+Phase 3 legal knowledge and search is now in progress. The backend includes legal search, detail, bookmark, admin create/update endpoints, FTS/trigram migration support, and seed data loading. The frontend includes citizen legal search/detail pages and an admin legal content page.
+
+Phase 4 and later feature endpoints for assessments, cases, documents, legal aid, RTI, and admin workflows should be implemented in the phase order defined by `Themis_Implementation_Plan.md`.

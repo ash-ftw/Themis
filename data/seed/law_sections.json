@@ -1,0 +1,82 @@
+[
+  {
+    "act_name": "Bharatiya Nyaya Sanhita, 2023",
+    "section_number": "316",
+    "title": "Criminal breach of trust",
+    "original_text": "Whoever, being in any manner entrusted with property, dishonestly misappropriates or converts that property to their own use commits criminal breach of trust.",
+    "plain_language": "This applies when someone is trusted with property or money and dishonestly uses it for themselves instead of the purpose for which it was entrusted.",
+    "example_scenarios": [
+      "An agent receives money to deposit for a client but keeps it.",
+      "A person entrusted with goods for safekeeping sells them without permission."
+    ],
+    "punishment": "Punishment depends on the role of the person entrusted and the facts of the case.",
+    "is_bailable": false,
+    "is_cognizable": true,
+    "ipc_mapping": "IPC 405/406",
+    "related_sections": ["318"],
+    "category_tags": ["consumer_complaint", "property", "fraud"],
+    "jurisdiction_notes": "Police procedure and forum choice depend on the place of incident and amount involved.",
+    "source_reference": "Bharatiya Nyaya Sanhita, 2023",
+    "review_status": "reviewed"
+  },
+  {
+    "act_name": "Bharatiya Nyaya Sanhita, 2023",
+    "section_number": "318",
+    "title": "Cheating",
+    "original_text": "Whoever deceives any person and fraudulently or dishonestly induces that person to deliver property, or intentionally induces an act or omission causing harm, commits cheating.",
+    "plain_language": "This covers deception that causes someone to give money, property, consent, or take an action they would not have taken if the truth were known.",
+    "example_scenarios": [
+      "A seller takes payment for a product while never intending to deliver it.",
+      "A person uses false identity details to obtain money."
+    ],
+    "punishment": "Punishment varies by the kind of cheating and the resulting harm.",
+    "is_bailable": false,
+    "is_cognizable": true,
+    "ipc_mapping": "IPC 415/420",
+    "related_sections": ["316"],
+    "category_tags": ["consumer_complaint", "cyber_fraud", "fraud"],
+    "jurisdiction_notes": "Cyber-related incidents may also require reporting through cyber crime channels.",
+    "source_reference": "Bharatiya Nyaya Sanhita, 2023",
+    "review_status": "reviewed"
+  },
+  {
+    "act_name": "Protection of Women from Domestic Violence Act, 2005",
+    "section_number": "12",
+    "title": "Application to Magistrate",
+    "original_text": "An aggrieved person, Protection Officer, or any other person on behalf of the aggrieved person may present an application to the Magistrate seeking relief under this Act.",
+    "plain_language": "A survivor of domestic violence, or someone acting for them, can ask a Magistrate for protection, residence, monetary, custody, or compensation orders.",
+    "example_scenarios": [
+      "A woman seeks a protection order after threats or physical violence.",
+      "A survivor asks for residence and monetary relief."
+    ],
+    "punishment": null,
+    "is_bailable": null,
+    "is_cognizable": null,
+    "ipc_mapping": null,
+    "related_sections": ["18", "19", "20", "21", "22"],
+    "category_tags": ["domestic_violence", "protection_order", "family"],
+    "jurisdiction_notes": "Applications are usually made before the Magistrate with local jurisdiction.",
+    "source_reference": "Protection of Women from Domestic Violence Act, 2005",
+    "review_status": "reviewed"
+  },
+  {
+    "act_name": "Right to Information Act, 2005",
+    "section_number": "6",
+    "title": "Request for obtaining information",
+    "original_text": "A person who desires to obtain any information under this Act shall make a request in writing or through electronic means to the public authority.",
+    "plain_language": "Any person can file an RTI request asking a public authority for information, with enough detail to identify the records requested.",
+    "example_scenarios": [
+      "Requesting copies of municipal road work records.",
+      "Asking for status and file notes for a public service application."
+    ],
+    "punishment": null,
+    "is_bailable": null,
+    "is_cognizable": null,
+    "ipc_mapping": null,
+    "related_sections": ["7", "8", "19"],
+    "category_tags": ["rti_request", "public_records"],
+    "jurisdiction_notes": "The request should be sent to the correct public information officer.",
+    "source_reference": "Right to Information Act, 2005",
+    "review_status": "reviewed"
+  }
+]

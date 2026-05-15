@@ -4,7 +4,14 @@ import pytest
 from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
-from app.core.security import AuthenticatedUser, LocalDevAuthProvider, require_role
+from app.core.config import Settings
+from app.core.security import (
+    AuthenticatedUser,
+    AuthError,
+    CognitoJwtAuthProvider,
+    LocalDevAuthProvider,
+    require_role,
+)
 from app.main import app
 from app.models.enums import UserRole
 
@@ -58,3 +65,43 @@ def test_role_guard_blocks_inactive_users() -> None:
         require_role(user, {UserRole.CITIZEN})
 
     assert exc_info.value.status_code == 403
+
+
+def test_cognito_provider_requires_issuer_and_audience() -> None:
+    provider = CognitoJwtAuthProvider(Settings(local_auth_enabled=False))
+
+    with pytest.raises(AuthError, match="issuer and audience"):
+        provider.verify("token")
+
+
+def test_cognito_provider_derives_jwks_url_from_issuer() -> None:
+    provider = CognitoJwtAuthProvider(
+        Settings(
+            auth_issuer="https://cognito-idp.ap-south-1.amazonaws.com/ap-south-1_example",
+            auth_audience="client-id",
+            local_auth_enabled=False,
+        )
+    )
+
+    assert (
+        provider._jwks_url()
+        == "https://cognito-idp.ap-south-1.amazonaws.com/ap-south-1_example/.well-known/jwks.json"
+    )
+
+
+def test_cognito_provider_maps_custom_role_claim() -> None:
+    provider = CognitoJwtAuthProvider(
+        Settings(auth_issuer="https://issuer.example", auth_audience="client-id")
+    )
+
+    assert provider._role_from_claims({"custom:role": "lawyer"}) == UserRole.LAWYER
+
+
+def test_cognito_provider_maps_groups_and_defaults_to_citizen() -> None:
+    provider = CognitoJwtAuthProvider(
+        Settings(auth_issuer="https://issuer.example", auth_audience="client-id")
+    )
+
+    assert provider._role_from_claims({"cognito:groups": ["admin"]}) == UserRole.ADMIN
+    assert provider._role_from_claims({"cognito:groups": ["lawyer"]}) == UserRole.LAWYER
+    assert provider._role_from_claims({}) == UserRole.CITIZEN
