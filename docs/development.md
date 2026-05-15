@@ -78,7 +78,9 @@ Local development auth tokens:
 
 Phase 3 legal knowledge and search is implemented. The backend includes legal search, detail, bookmark, admin create/update endpoints, FTS/trigram migration support, and seed data loading. The frontend includes citizen legal search/detail pages, bookmark submission, and an admin legal content table with create/update form.
 
-Phase 4 and later feature endpoints for assessments, cases, documents, legal aid, RTI, and admin workflows should be implemented in the phase order defined by `Themis_Implementation_Plan.md`.
+Phase 4 assessment and complaint draft generation is implemented. The backend includes versioned assessment rules, dynamic category questions, start/answer/analyze/get/save-to-case endpoints, complaint draft generate/get/update/export/save-to-case endpoints, export document metadata, and audit logging. The frontend includes a guided assessment form, result page with disclaimers, possible section suggestions with confidence labels, evidence checklists, manual complaint creation, editable draft preview, PDF export action, and save-to-case action.
+
+Phase 5 and later feature endpoints for full case and hearing management, documents, legal aid, RTI, and admin workflows should be implemented in the phase order defined by `Themis_Implementation_Plan.md`.
 
 Seed legal sections after migrations:
 

@@ -11,6 +11,7 @@ This repository now contains the initial application scaffold based on the PRD a
 5. Celery task entry points for OCR, PDF exports, notifications, and reminders.
 6. Phase 2 local auth and role scaffolding for protected API/frontend flows.
 7. Phase 3 legal knowledge search and admin content management.
+8. Phase 4 guided assessments and editable complaint draft generation.
 
 ## Documentation
 
@@ -53,9 +54,8 @@ Create `.env` from `.env.example` only when you need to override the local defau
 
 The implementation should continue in this order:
 
-1. Assessment and complaint draft generation.
-2. Case and hearing management.
-3. Lawyer verification and legal aid matching.
-4. Document repository and OCR.
-5. RTI generation and notifications.
-6. Admin dashboard, audit logs, metrics, and hardening.
+1. Case and hearing management.
+2. Lawyer verification and legal aid matching.
+3. Document repository and OCR.
+4. RTI generation and notifications.
+5. Admin dashboard, audit logs, metrics, and hardening.

@@ -1,6 +1,5 @@
 import {
   ArrowRight,
-  CalendarClock,
   CheckCircle2,
   FilePlus2,
   FolderLock,
@@ -89,10 +88,20 @@ export function RoleDashboard() {
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <ActionCard icon={FilePlus2} label="Start assessment" value="18 issue categories" />
+        <ActionCard
+          href="/citizen/assessments/new"
+          icon={FilePlus2}
+          label="Start assessment"
+          value="18 issue categories"
+        />
+        <ActionCard
+          href="/citizen/complaints/new"
+          icon={FilePlus2}
+          label="Complaint draft"
+          value="Editable preview"
+        />
         <ActionCard icon={Gavel} label="Request legal aid" value="Verified lawyers only" />
         <ActionCard icon={FolderLock} label="Upload document" value="Private case storage" />
-        <ActionCard icon={CalendarClock} label="Add hearing" value="Reminder workflow" />
       </section>
 
       <section className="grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">
@@ -179,17 +188,32 @@ export function RoleDashboard() {
 }
 
 function ActionCard({
+  href,
   icon: Icon,
   label,
   value
 }: {
+  href?: string;
   icon: React.ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
   label: string;
   value: string;
 }) {
+  const className =
+    "focus-ring block rounded-md border border-border bg-white p-4 text-left shadow-panel transition hover:border-primary hover:bg-cyan-50";
+
+  if (href) {
+    return (
+      <a className={className} href={href}>
+        <Icon aria-hidden={true} className="h-5 w-5 text-primary" />
+        <div className="mt-4 text-sm font-semibold">{label}</div>
+        <div className="mt-1 text-sm text-muted-foreground">{value}</div>
+      </a>
+    );
+  }
+
   return (
     <button
-      className="focus-ring rounded-md border border-border bg-white p-4 text-left shadow-panel transition hover:border-primary hover:bg-cyan-50"
+      className={className}
       type="button"
     >
       <Icon aria-hidden={true} className="h-5 w-5 text-primary" />

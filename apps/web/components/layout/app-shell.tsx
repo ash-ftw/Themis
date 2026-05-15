@@ -1,6 +1,7 @@
 import {
   Bell,
   BookOpen,
+  ClipboardCheck,
   FileText,
   LayoutDashboard,
   Search,
@@ -18,6 +19,13 @@ const navigation: Array<{
 }> = [
   { label: "Dashboard", href: "/citizen/dashboard", icon: LayoutDashboard, roles: ["citizen"] },
   { label: "Law Search", href: "/citizen/laws", icon: Search, roles: ["citizen"] },
+  {
+    label: "Assessment",
+    href: "/citizen/assessments/new",
+    icon: ClipboardCheck,
+    roles: ["citizen"]
+  },
+  { label: "Complaint", href: "/citizen/complaints/new", icon: FileText, roles: ["citizen"] },
   { label: "Profile", href: "/citizen/profile", icon: UserRoundCheck, roles: ["citizen"] },
   { label: "Dashboard", href: "/lawyer/dashboard", icon: LayoutDashboard, roles: ["lawyer"] },
   { label: "Profile", href: "/lawyer/profile", icon: UserRoundCheck, roles: ["lawyer"] },
