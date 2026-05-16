@@ -26,6 +26,10 @@ class Settings(BaseSettings):
     object_storage_endpoint: str = "http://localhost:9000"
     object_storage_bucket: str = "themis-documents"
     object_storage_region: str = "ap-south-1"
+    object_storage_access_key: str = "themis"
+    object_storage_secret_key: str = "themis-local-password"
+    object_storage_presign_expires_seconds: int = 900
+    document_max_file_size_bytes: int = 10 * 1024 * 1024
 
     auth_issuer: str | None = None
     auth_audience: str | None = None

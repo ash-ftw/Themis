@@ -234,6 +234,39 @@ export type MatchRequest = {
   lawyer_email: string | null;
 };
 
+export type DocumentAccessLevel = "case_private" | "lawyer_private" | "admin_review";
+export type OcrStatus = "not_started" | "processing" | "completed" | "failed";
+export type MalwareScanStatus = "not_scanned" | "clean" | "suspicious" | "failed";
+
+export type DocumentRecord = {
+  id: string;
+  case_id: string | null;
+  uploaded_by: string;
+  original_file_name: string;
+  object_key: string;
+  mime_type: string;
+  file_size: number;
+  file_hash: string;
+  document_type: string;
+  ocr_status: OcrStatus;
+  ocr_text: string | null;
+  access_level: DocumentAccessLevel;
+  malware_scan_status: MalwareScanStatus;
+  metadata: Record<string, unknown>;
+  deleted_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type DocumentPresignUploadResponse = {
+  upload_url: string;
+  method: "PUT";
+  object_key: string;
+  expires_at: string;
+  headers: Record<string, string>;
+  max_file_size: number;
+};
+
 export async function getHealth() {
   const response = await fetch(`${apiBaseUrl}/health`, {
     cache: "no-store"
@@ -1009,4 +1042,114 @@ export async function declineLegalAidRequest(authToken: string, requestId: strin
   }
 
   return response.json() as Promise<MatchRequest>;
+}
+
+export async function presignDocumentUpload(authToken: string, payload: unknown) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/documents/presign-upload`, {
+    body: JSON.stringify(payload),
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+      "Content-Type": "application/json"
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to prepare the document upload.");
+  }
+
+  return response.json() as Promise<DocumentPresignUploadResponse>;
+}
+
+export async function completeDocumentUpload(authToken: string, payload: unknown) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/documents/complete-upload`, {
+    body: JSON.stringify(payload),
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+      "Content-Type": "application/json"
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to complete the document upload.");
+  }
+
+  return response.json() as Promise<DocumentRecord>;
+}
+
+export async function listCaseDocuments(authToken: string, caseId: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/cases/${caseId}/documents`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to load case documents.");
+  }
+
+  return response.json() as Promise<{
+    case_id: string;
+    total: number;
+    documents: DocumentRecord[];
+  }>;
+}
+
+export async function getDocumentDownloadUrl(authToken: string, documentId: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/documents/${documentId}/download-url`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to create document download link.");
+  }
+
+  return response.json() as Promise<{
+    document_id: string;
+    download_url: string;
+    method: "GET";
+    expires_at: string;
+  }>;
+}
+
+export async function requestDocumentOcr(authToken: string, documentId: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/documents/${documentId}/ocr`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to queue document OCR.");
+  }
+
+  return response.json() as Promise<{
+    document: DocumentRecord;
+    status: string;
+  }>;
+}
+
+export async function deleteDocument(authToken: string, documentId: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/documents/${documentId}`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    },
+    method: "DELETE"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to delete the document.");
+  }
+
+  return response.json() as Promise<DocumentRecord>;
 }

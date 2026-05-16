@@ -1,14 +1,19 @@
-import { BellRing, Save } from "lucide-react";
+import { BellRing, Download, FileUp, Save, ScanText, Trash2 } from "lucide-react";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
 import { StatusBadge } from "@/components/ui/status-badge";
-import { getCase, getCaseTimeline, listHearings } from "@/lib/api";
+import { getCase, getCaseTimeline, listCaseDocuments, listHearings } from "@/lib/api";
+import type { DocumentRecord } from "@/lib/api";
 
 import {
+  deleteAssignedCaseDocument,
+  downloadAssignedCaseDocument,
+  retryAssignedDocumentOcr,
   scheduleAssignedHearingReminder,
   updateAssignedCase,
-  updateAssignedHearing
+  updateAssignedHearing,
+  uploadAssignedCaseDocument
 } from "./actions";
 
 type PageParams = Promise<{ id: string }>;
@@ -24,13 +29,14 @@ const lawyerStatuses = [
 export default async function LawyerCaseDetailPage({ params }: { params: PageParams }) {
   const { id } = await params;
   const token = (await cookies()).get("themis-session")?.value ?? "";
-  const [caseRecord, timeline, hearings] = token
+  const [caseRecord, timeline, hearings, caseDocuments] = token
     ? await Promise.all([
         getCase(token, id).catch(() => null),
         getCaseTimeline(token, id).catch(() => null),
-        listHearings(token, id).catch(() => null)
+        listHearings(token, id).catch(() => null),
+        listCaseDocuments(token, id).catch(() => null)
       ])
-    : [null, null, null];
+    : [null, null, null, null];
 
   if (!caseRecord) {
     notFound();
@@ -146,6 +152,79 @@ export default async function LawyerCaseDetailPage({ params }: { params: PagePar
       </section>
 
       <section className="rounded-md border border-border bg-white shadow-panel">
+        <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3 md:px-5">
+          <div className="flex items-center gap-2">
+            <FileUp aria-hidden="true" className="h-5 w-5 text-primary" />
+            <h2 className="text-base font-semibold">Case documents</h2>
+          </div>
+          <StatusBadge>{caseDocuments?.total ?? 0} files</StatusBadge>
+        </div>
+        <div className="grid gap-6 p-4 lg:grid-cols-[360px_1fr] md:p-5">
+          <form action={uploadAssignedCaseDocument.bind(null, caseRecord.id)} className="space-y-4">
+            <label className="block">
+              <span className="text-sm font-medium text-slate-700">File</span>
+              <input
+                className="focus-ring mt-2 w-full rounded-md border border-dashed border-border px-3 py-3 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-2 file:text-sm file:font-medium file:text-primary-foreground"
+                name="document"
+                required
+                type="file"
+              />
+            </label>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+              <label className="block">
+                <span className="text-sm font-medium text-slate-700">Document type</span>
+                <select
+                  className="focus-ring mt-2 h-10 w-full rounded-md border border-border bg-white px-3 text-sm"
+                  defaultValue="lawyer_note"
+                  name="document_type"
+                >
+                  <option value="lawyer_note">Lawyer note</option>
+                  <option value="evidence">Evidence</option>
+                  <option value="court_notice">Court notice</option>
+                  <option value="court_order">Court order</option>
+                  <option value="other">Other</option>
+                </select>
+              </label>
+              <label className="block">
+                <span className="text-sm font-medium text-slate-700">Access</span>
+                <select
+                  className="focus-ring mt-2 h-10 w-full rounded-md border border-border bg-white px-3 text-sm"
+                  defaultValue="case_private"
+                  name="access_level"
+                >
+                  <option value="case_private">Case private</option>
+                  <option value="lawyer_private">Lawyer private</option>
+                </select>
+              </label>
+            </div>
+            <button
+              className="focus-ring inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground"
+              type="submit"
+            >
+              <FileUp aria-hidden="true" className="h-4 w-4" />
+              Upload
+            </button>
+          </form>
+
+          <div className="space-y-3">
+            {caseDocuments?.documents.length ? (
+              caseDocuments.documents.map((document) => (
+                <LawyerDocumentCard
+                  caseId={caseRecord.id}
+                  document={document}
+                  key={document.id}
+                />
+              ))
+            ) : (
+              <div className="rounded-md border border-border px-4 py-10 text-center text-sm text-muted-foreground">
+                No documents are attached to this assigned case.
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section className="rounded-md border border-border bg-white shadow-panel">
         <div className="border-b border-border px-4 py-3 md:px-5">
           <h2 className="text-base font-semibold">Timeline</h2>
         </div>
@@ -178,6 +257,62 @@ export default async function LawyerCaseDetailPage({ params }: { params: PagePar
   );
 }
 
+function LawyerDocumentCard({ caseId, document }: { caseId: string; document: DocumentRecord }) {
+  return (
+    <div className="rounded-md border border-border p-4">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h3 className="font-medium">{document.original_file_name}</h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {document.document_type.replaceAll("_", " ")} - {formatFileSize(document.file_size)}
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <StatusBadge tone={document.ocr_status === "failed" ? "danger" : "primary"}>
+            OCR {document.ocr_status.replaceAll("_", " ")}
+          </StatusBadge>
+          <StatusBadge>{document.access_level.replaceAll("_", " ")}</StatusBadge>
+        </div>
+      </div>
+      {document.ocr_text ? (
+        <details className="mt-3 rounded-md border border-border bg-muted/50 p-3 text-sm leading-6">
+          <summary className="cursor-pointer font-medium">Extracted text</summary>
+          <p className="mt-2 whitespace-pre-wrap text-muted-foreground">{document.ocr_text}</p>
+        </details>
+      ) : null}
+      <div className="mt-3 flex flex-wrap gap-2">
+        <form action={downloadAssignedCaseDocument.bind(null, caseId, document.id)}>
+          <button
+            className="focus-ring inline-flex h-9 items-center justify-center gap-2 rounded-md border border-border px-3 text-sm font-medium hover:bg-muted"
+            type="submit"
+          >
+            <Download aria-hidden="true" className="h-4 w-4" />
+            Download
+          </button>
+        </form>
+        <form action={retryAssignedDocumentOcr.bind(null, caseId, document.id)}>
+          <button
+            className="focus-ring inline-flex h-9 items-center justify-center gap-2 rounded-md border border-border px-3 text-sm font-medium hover:bg-muted"
+            type="submit"
+          >
+            <ScanText aria-hidden="true" className="h-4 w-4" />
+            OCR
+          </button>
+        </form>
+        <form action={deleteAssignedCaseDocument.bind(null, caseId, document.id)}>
+          <button
+            className="focus-ring inline-flex h-9 items-center justify-center gap-2 rounded-md border border-red-200 px-3 text-sm font-medium text-red-700 hover:bg-red-50"
+            type="submit"
+          >
+            <Trash2 aria-hidden="true" className="h-4 w-4" />
+            Delete
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 function Input({
   defaultValue,
   label,
@@ -200,6 +335,16 @@ function Input({
       />
     </label>
   );
+}
+
+function formatFileSize(size: number) {
+  if (size < 1024) {
+    return `${size} B`;
+  }
+  if (size < 1024 * 1024) {
+    return `${(size / 1024).toFixed(1)} KB`;
+  }
+  return `${(size / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 function Textarea({

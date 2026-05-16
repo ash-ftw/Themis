@@ -84,7 +84,9 @@ Phase 5 case and hearing management is implemented. The backend includes case CR
 
 Phase 6 lawyer verification and legal aid matching is implemented. The backend includes lawyer profile upsert/read endpoints, admin verification queue and approve/reject endpoints, verified lawyer matching with scoring breakdowns, legal aid request create/list/cancel/expire/accept/decline flows, case assignment on acceptance, timeline events, notifications, and legal aid indexes. The frontend includes lawyer profile submission, admin verification queue actions, citizen legal aid matching from case detail, and lawyer legal aid request inbox with accept/decline actions.
 
-Phase 7 and later feature endpoints for document storage, OCR, RTI, and admin hardening should be implemented in the phase order defined by `Themis_Implementation_Plan.md`.
+Phase 7 document repository and OCR is implemented. The backend includes signed S3-compatible upload and download URL generation, upload completion metadata validation, document access policy enforcement, case document listing, logical deletion, OCR request/status transitions, audit logging, timeline events, document indexes, and a MinIO bucket initialization service for local development. The frontend includes citizen and lawyer case document upload controls, document lists, OCR/malware/access status labels, extracted-text preview, authorized download redirects, OCR retry actions, and delete actions.
+
+Phase 8 and later feature endpoints for RTI, notifications, and admin hardening should be implemented in the phase order defined by `Themis_Implementation_Plan.md`.
 
 Seed legal sections after migrations:
 

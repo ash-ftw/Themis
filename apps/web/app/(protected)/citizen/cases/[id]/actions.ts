@@ -9,11 +9,15 @@ import {
   cancelLegalAidRequest,
   createHearing,
   createLegalAidRequest,
+  deleteDocument,
   deleteHearing,
+  getDocumentDownloadUrl,
+  requestDocumentOcr,
   scheduleHearingReminders,
   updateCase,
   updateHearing
 } from "@/lib/api";
+import { uploadCaseDocumentFile } from "@/lib/document-upload";
 
 export async function updateCitizenCase(caseId: string, formData: FormData) {
   const token = (await cookies()).get("themis-session")?.value ?? "";
@@ -77,6 +81,31 @@ export async function requestLegalAid(caseId: string, lawyerId: string, formData
 export async function cancelCaseLegalAidRequest(caseId: string, requestId: string) {
   const token = (await cookies()).get("themis-session")?.value ?? "";
   await cancelLegalAidRequest(token, requestId);
+  revalidatePath(`/citizen/cases/${caseId}`);
+}
+
+export async function uploadCitizenCaseDocument(caseId: string, formData: FormData) {
+  const token = (await cookies()).get("themis-session")?.value ?? "";
+  await uploadCaseDocumentFile(token, caseId, formData);
+  revalidatePath(`/citizen/cases/${caseId}`);
+}
+
+export async function downloadCitizenCaseDocument(caseId: string, documentId: string) {
+  const token = (await cookies()).get("themis-session")?.value ?? "";
+  const download = await getDocumentDownloadUrl(token, documentId);
+  revalidatePath(`/citizen/cases/${caseId}`);
+  redirect(download.download_url as Parameters<typeof redirect>[0]);
+}
+
+export async function retryCitizenDocumentOcr(caseId: string, documentId: string) {
+  const token = (await cookies()).get("themis-session")?.value ?? "";
+  await requestDocumentOcr(token, documentId);
+  revalidatePath(`/citizen/cases/${caseId}`);
+}
+
+export async function deleteCitizenCaseDocument(caseId: string, documentId: string) {
+  const token = (await cookies()).get("themis-session")?.value ?? "";
+  await deleteDocument(token, documentId);
   revalidatePath(`/citizen/cases/${caseId}`);
 }
 

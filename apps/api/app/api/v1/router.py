@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.v1 import assessments, auth, cases, complaints, health, legal, legal_aid
+from app.api.v1 import assessments, auth, cases, complaints, documents, health, legal, legal_aid
 
 api_router = APIRouter()
 api_router.include_router(auth.router)
@@ -12,6 +12,8 @@ api_router.include_router(complaints.router)
 api_router.include_router(cases.router)
 api_router.include_router(cases.hearing_router)
 api_router.include_router(cases.lawyer_router)
+api_router.include_router(documents.case_documents_router)
+api_router.include_router(documents.documents_router)
 api_router.include_router(legal_aid.lawyer_router)
 api_router.include_router(legal_aid.admin_router)
 api_router.include_router(legal_aid.legal_aid_router)

@@ -14,6 +14,7 @@ This repository now contains the initial application scaffold based on the PRD a
 8. Phase 4 guided assessments and editable complaint draft generation.
 9. Phase 5 case and hearing management with timeline and assigned lawyer access.
 10. Phase 6 lawyer verification and legal aid request matching.
+11. Phase 7 secure document repository with signed uploads/downloads and OCR status flow.
 
 ## Documentation
 
@@ -56,6 +57,5 @@ Create `.env` from `.env.example` only when you need to override the local defau
 
 The implementation should continue in this order:
 
-1. Document repository and OCR.
-2. RTI generation and notifications.
-3. Admin dashboard, audit logs, metrics, and hardening.
+1. RTI generation and notifications.
+2. Admin dashboard, audit logs, metrics, and hardening.
