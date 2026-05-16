@@ -6,7 +6,9 @@ import { redirect } from "next/navigation";
 
 import {
   archiveCase,
+  cancelLegalAidRequest,
   createHearing,
+  createLegalAidRequest,
   deleteHearing,
   scheduleHearingReminders,
   updateCase,
@@ -60,6 +62,21 @@ export async function deleteCaseHearing(caseId: string, hearingId: string) {
 export async function scheduleCaseHearingReminder(caseId: string, hearingId: string) {
   const token = (await cookies()).get("themis-session")?.value ?? "";
   await scheduleHearingReminders(token, hearingId);
+  revalidatePath(`/citizen/cases/${caseId}`);
+}
+
+export async function requestLegalAid(caseId: string, lawyerId: string, formData: FormData) {
+  const token = (await cookies()).get("themis-session")?.value ?? "";
+  await createLegalAidRequest(token, caseId, {
+    lawyer_id: lawyerId,
+    message: valueOf(formData, "message")
+  });
+  revalidatePath(`/citizen/cases/${caseId}`);
+}
+
+export async function cancelCaseLegalAidRequest(caseId: string, requestId: string) {
+  const token = (await cookies()).get("themis-session")?.value ?? "";
+  await cancelLegalAidRequest(token, requestId);
   revalidatePath(`/citizen/cases/${caseId}`);
 }
 

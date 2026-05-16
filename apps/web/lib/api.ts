@@ -171,6 +171,69 @@ export type HearingRecord = {
   updated_at: string;
 };
 
+export type VerificationStatus = "pending" | "approved" | "rejected";
+
+export type LawyerProfileDetail = {
+  user_id: string;
+  email: string;
+  phone: string | null;
+  is_verified: boolean;
+  bar_number: string;
+  state_bar_council: string;
+  district: string;
+  specializations: string[];
+  languages: string[];
+  is_pro_bono: boolean;
+  availability: Record<string, unknown>;
+  max_active_cases: number;
+  active_case_count: number;
+  verification_status: VerificationStatus;
+  verification_notes: string | null;
+  verification_document_id: string | null;
+  rating: number | null;
+};
+
+export type LawyerSuggestion = {
+  lawyer_id: string;
+  email: string;
+  phone: string | null;
+  district: string;
+  state_bar_council: string;
+  specializations: string[];
+  languages: string[];
+  is_pro_bono: boolean;
+  active_case_count: number;
+  max_active_cases: number;
+  score: number;
+  score_breakdown: Record<string, number>;
+};
+
+export type MatchRequestStatus =
+  | "pending"
+  | "accepted"
+  | "declined"
+  | "expired"
+  | "cancelled"
+  | "reassigned";
+
+export type MatchRequest = {
+  id: string;
+  case_id: string;
+  citizen_id: string;
+  lawyer_id: string;
+  score: number;
+  score_breakdown: Record<string, number>;
+  status: MatchRequestStatus;
+  message: string | null;
+  requested_at: string;
+  responded_at: string | null;
+  expires_at: string | null;
+  case_title: string | null;
+  case_category: string | null;
+  case_district: string | null;
+  lawyer_email: string | null;
+};
+
 export async function getHealth() {
   const response = await fetch(`${apiBaseUrl}/health`, {
     cache: "no-store"
@@ -738,4 +801,212 @@ export async function scheduleHearingReminders(authToken: string, hearingId: str
     status: string;
     reminder_key: string;
   }>;
+}
+
+export async function getLawyerProfile(authToken: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/lawyers/profile`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to load lawyer profile.");
+  }
+
+  return response.json() as Promise<LawyerProfileDetail>;
+}
+
+export async function upsertLawyerProfile(authToken: string, payload: unknown) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/lawyers/profile`, {
+    body: JSON.stringify(payload),
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+      "Content-Type": "application/json"
+    },
+    method: "PUT"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to save lawyer profile.");
+  }
+
+  return response.json() as Promise<LawyerProfileDetail>;
+}
+
+export async function listLawyerVerifications(authToken: string, verificationStatus = "pending") {
+  const query = new URLSearchParams({ verification_status: verificationStatus });
+  const response = await fetch(`${apiBaseUrl}/api/v1/admin/lawyers/verifications?${query}`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to load lawyer verifications.");
+  }
+
+  return response.json() as Promise<{
+    total: number;
+    lawyers: LawyerProfileDetail[];
+  }>;
+}
+
+export async function approveLawyer(authToken: string, lawyerId: string, payload: unknown) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/admin/lawyers/${lawyerId}/approve`, {
+    body: JSON.stringify(payload),
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+      "Content-Type": "application/json"
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to approve lawyer.");
+  }
+
+  return response.json() as Promise<LawyerProfileDetail>;
+}
+
+export async function rejectLawyer(authToken: string, lawyerId: string, payload: unknown) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/admin/lawyers/${lawyerId}/reject`, {
+    body: JSON.stringify(payload),
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+      "Content-Type": "application/json"
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to reject lawyer.");
+  }
+
+  return response.json() as Promise<LawyerProfileDetail>;
+}
+
+export async function suggestLawyersForCase(authToken: string, caseId: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/legal-aid/cases/${caseId}/suggestions`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to load lawyer suggestions.");
+  }
+
+  return response.json() as Promise<{
+    case_id: string;
+    suggestions: LawyerSuggestion[];
+  }>;
+}
+
+export async function createLegalAidRequest(authToken: string, caseId: string, payload: unknown) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/legal-aid/cases/${caseId}/requests`, {
+    body: JSON.stringify(payload),
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+      "Content-Type": "application/json"
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to create legal aid request.");
+  }
+
+  return response.json() as Promise<MatchRequest>;
+}
+
+export async function listCitizenLegalAidRequests(authToken: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/legal-aid/requests`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to load legal aid requests.");
+  }
+
+  return response.json() as Promise<{
+    total: number;
+    requests: MatchRequest[];
+  }>;
+}
+
+export async function cancelLegalAidRequest(authToken: string, requestId: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/legal-aid/requests/${requestId}/cancel`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to cancel legal aid request.");
+  }
+
+  return response.json() as Promise<MatchRequest>;
+}
+
+export async function listLawyerLegalAidRequests(authToken: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/lawyers/legal-aid-requests`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to load lawyer legal aid requests.");
+  }
+
+  return response.json() as Promise<{
+    total: number;
+    requests: MatchRequest[];
+  }>;
+}
+
+export async function acceptLegalAidRequest(authToken: string, requestId: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/lawyers/legal-aid-requests/${requestId}/accept`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to accept legal aid request.");
+  }
+
+  return response.json() as Promise<MatchRequest>;
+}
+
+export async function declineLegalAidRequest(authToken: string, requestId: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/lawyers/legal-aid-requests/${requestId}/decline`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to decline legal aid request.");
+  }
+
+  return response.json() as Promise<MatchRequest>;
 }

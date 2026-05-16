@@ -11,13 +11,17 @@ export default function AdminDashboardPage() {
     <div className="mx-auto max-w-7xl space-y-6">
       <section className="grid gap-4 md:grid-cols-3">
         {adminQueues.map((item) => (
-          <div className="rounded-md border border-border bg-white p-4 shadow-panel" key={item.label}>
+          <a
+            className="rounded-md border border-border bg-white p-4 shadow-panel transition hover:border-primary hover:bg-cyan-50"
+            href={item.label === "Lawyer verifications" ? "/admin/lawyers" : "/admin/dashboard"}
+            key={item.label}
+          >
             <p className="text-sm text-muted-foreground">{item.label}</p>
             <div className="mt-3 flex items-end justify-between gap-3">
               <div className="text-3xl font-semibold">{item.value}</div>
               <StatusBadge tone={item.tone}>Open</StatusBadge>
             </div>
-          </div>
+          </a>
         ))}
       </section>
 

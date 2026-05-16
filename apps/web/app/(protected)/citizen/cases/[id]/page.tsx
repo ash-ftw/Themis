@@ -1,13 +1,21 @@
-import { Archive, BellRing, CalendarPlus, Save } from "lucide-react";
+import { Archive, BellRing, CalendarPlus, Gavel, Save } from "lucide-react";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
 import { StatusBadge } from "@/components/ui/status-badge";
-import { getCase, getCaseTimeline, listHearings } from "@/lib/api";
+import {
+  getCase,
+  getCaseTimeline,
+  listCitizenLegalAidRequests,
+  listHearings,
+  suggestLawyersForCase
+} from "@/lib/api";
 
 import {
   archiveCitizenCase,
+  cancelCaseLegalAidRequest,
   createCaseHearing,
+  requestLegalAid,
   deleteCaseHearing,
   scheduleCaseHearingReminder,
   updateCaseHearing,
@@ -34,13 +42,15 @@ const statuses = [
 export default async function CitizenCaseDetailPage({ params }: { params: PageParams }) {
   const { id } = await params;
   const token = (await cookies()).get("themis-session")?.value ?? "";
-  const [caseRecord, timeline, hearings] = token
+  const [caseRecord, timeline, hearings, suggestions, legalAidRequests] = token
     ? await Promise.all([
         getCase(token, id).catch(() => null),
         getCaseTimeline(token, id).catch(() => null),
-        listHearings(token, id).catch(() => null)
+        listHearings(token, id).catch(() => null),
+        suggestLawyersForCase(token, id).catch(() => null),
+        listCitizenLegalAidRequests(token).catch(() => null)
       ])
-    : [null, null, null];
+    : [null, null, null, null, null];
 
   if (!caseRecord) {
     notFound();
@@ -266,6 +276,91 @@ export default async function CitizenCaseDetailPage({ params }: { params: PagePa
             Archive
           </button>
         </form>
+      </section>
+
+      <section className="rounded-md border border-border bg-white shadow-panel">
+        <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3 md:px-5">
+          <div className="flex items-center gap-2">
+            <Gavel aria-hidden="true" className="h-5 w-5 text-primary" />
+            <h2 className="text-base font-semibold">Legal aid matching</h2>
+          </div>
+          <StatusBadge>{suggestions?.suggestions.length ?? 0} suggestions</StatusBadge>
+        </div>
+        <div className="grid gap-6 p-4 lg:grid-cols-[1fr_0.8fr] md:p-5">
+          <div className="space-y-3">
+            {suggestions?.suggestions.length ? (
+              suggestions.suggestions.slice(0, 5).map((lawyer) => (
+                <div className="rounded-md border border-border p-4" key={lawyer.lawyer_id}>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="font-medium">{lawyer.email}</h3>
+                    <StatusBadge tone="primary">{lawyer.score} score</StatusBadge>
+                    {lawyer.is_pro_bono ? <StatusBadge tone="success">pro bono</StatusBadge> : null}
+                  </div>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {lawyer.district} - {lawyer.state_bar_council}
+                  </p>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    {lawyer.specializations.join(", ") || "No specialization listed"}
+                  </p>
+                  <form action={requestLegalAid.bind(null, caseRecord.id, lawyer.lawyer_id)} className="mt-3">
+                    <textarea
+                      className="focus-ring min-h-20 w-full rounded-md border border-border px-3 py-2 text-sm"
+                      name="message"
+                      placeholder="Message for the lawyer"
+                    />
+                    <button
+                      className="focus-ring mt-2 inline-flex h-9 items-center justify-center rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground"
+                      type="submit"
+                    >
+                      Request legal aid
+                    </button>
+                  </form>
+                </div>
+              ))
+            ) : (
+              <div className="rounded-md border border-border px-4 py-8 text-center text-sm text-muted-foreground">
+                No verified lawyers currently match this case.
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold">Requests</h3>
+            {legalAidRequests?.requests.filter((item) => item.case_id === caseRecord.id).length ? (
+              legalAidRequests.requests
+                .filter((item) => item.case_id === caseRecord.id)
+                .map((request) => (
+                  <div className="rounded-md border border-border p-4" key={request.id}>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <StatusBadge>{request.status}</StatusBadge>
+                      <span className="text-sm text-muted-foreground">
+                        {request.lawyer_email ?? request.lawyer_id}
+                      </span>
+                    </div>
+                    {request.message ? (
+                      <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                        {request.message}
+                      </p>
+                    ) : null}
+                    {request.status === "pending" ? (
+                      <form action={cancelCaseLegalAidRequest.bind(null, caseRecord.id, request.id)}>
+                        <button
+                          className="focus-ring mt-3 inline-flex h-9 items-center justify-center rounded-md border border-border px-3 text-sm font-medium hover:bg-muted"
+                          type="submit"
+                        >
+                          Cancel request
+                        </button>
+                      </form>
+                    ) : null}
+                  </div>
+                ))
+            ) : (
+              <p className="rounded-md border border-border p-4 text-sm text-muted-foreground">
+                No legal aid requests for this case yet.
+              </p>
+            )}
+          </div>
+        </div>
       </section>
     </div>
   );

@@ -4,6 +4,7 @@ import {
   BriefcaseBusiness,
   ClipboardCheck,
   FileText,
+  Gavel,
   LayoutDashboard,
   Search,
   ShieldCheck,
@@ -30,11 +31,12 @@ const navigation: Array<{
   { label: "Complaint", href: "/citizen/complaints/new", icon: FileText, roles: ["citizen"] },
   { label: "Profile", href: "/citizen/profile", icon: UserRoundCheck, roles: ["citizen"] },
   { label: "Dashboard", href: "/lawyer/dashboard", icon: LayoutDashboard, roles: ["lawyer"] },
+  { label: "Requests", href: "/lawyer/requests", icon: Gavel, roles: ["lawyer"] },
   { label: "Assigned Cases", href: "/lawyer/cases", icon: BriefcaseBusiness, roles: ["lawyer"] },
   { label: "Profile", href: "/lawyer/profile", icon: UserRoundCheck, roles: ["lawyer"] },
   { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard, roles: ["admin"] },
   { label: "Law Content", href: "/admin/laws", icon: BookOpen, roles: ["admin"] },
-  { label: "Verification", href: "/admin/dashboard", icon: ShieldCheck, roles: ["admin"] },
+  { label: "Verification", href: "/admin/lawyers", icon: ShieldCheck, roles: ["admin"] },
   { label: "Audit Logs", href: "/admin/dashboard", icon: FileText, roles: ["admin"] }
 ];
 

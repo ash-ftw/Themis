@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   const role = isAppRole(requestedRole) ? requestedRole : "citizen";
   const authToken = `dev-${role}`;
 
-  await syncProfile(authToken, {}).catch(() => null);
+  const syncedProfile = await syncProfile(authToken, {}).catch(() => null);
 
   const response = NextResponse.redirect(new URL(roleHome[role], request.url));
 
@@ -26,7 +26,10 @@ export async function GET(request: NextRequest) {
   });
 
   if (role === "lawyer") {
-    response.cookies.set("themis-verification", "pending", {
+    const verificationStatus =
+      syncedProfile?.user?.lawyer_profile?.verification_status ??
+      (syncedProfile?.user?.is_verified ? "approved" : "pending");
+    response.cookies.set("themis-verification", verificationStatus, {
       maxAge,
       path: "/",
       sameSite: "lax"
