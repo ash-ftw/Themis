@@ -37,7 +37,7 @@ def upgrade() -> None:
         """
         CREATE INDEX IF NOT EXISTS ix_documents_suspicious_malware
         ON documents (created_at)
-        WHERE malware_scan_status = 'suspicious'
+        WHERE malware_scan_status = 'SUSPICIOUS'
         """
     )
 

@@ -41,7 +41,7 @@ def upgrade() -> None:
         "match_requests",
         ["case_id", "lawyer_id"],
         unique=True,
-        postgresql_where=sa.text("status = 'pending'"),
+        postgresql_where=sa.text("status = 'PENDING'"),
     )
 
 
