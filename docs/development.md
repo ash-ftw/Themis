@@ -27,6 +27,8 @@ Local URLs:
 5. MinIO console: `http://localhost:9001`
 6. Mailpit: `http://localhost:8025`
 
+Use `localhost` in the browser for the web app. `0.0.0.0` is only the internal bind address used by Docker and should not be opened directly.
+
 ## Database Migrations
 
 Run migrations from the API container:

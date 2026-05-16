@@ -21,6 +21,7 @@ coverage/
 
 # Local data
 .themis-data/
+celerybeat-schedule*
 dist/
 build/
 
