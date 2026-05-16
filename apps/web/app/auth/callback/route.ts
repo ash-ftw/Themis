@@ -12,6 +12,13 @@ export async function GET(request: NextRequest) {
 
   const syncedProfile = await syncProfile(authToken, {}).catch(() => null);
 
+  if (!syncedProfile?.user) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("error", "auth-sync");
+    loginUrl.searchParams.set("role", role);
+    return NextResponse.redirect(loginUrl);
+  }
+
   const response = NextResponse.redirect(new URL(roleHome[role], request.url));
 
   response.cookies.set("themis-session", authToken, {

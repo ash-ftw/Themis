@@ -16,6 +16,8 @@ docker compose up --build
 
 The Compose file has local defaults. Create `.env` from `.env.example` only when you need to override ports, credentials, or integration settings.
 
+The web container uses `API_BASE_URL=http://api:8000` for server-side calls to the FastAPI service. Keep `NEXT_PUBLIC_API_BASE_URL=http://localhost:8000` for browser-visible URLs when running through Docker.
+
 Local URLs:
 
 1. Web app: `http://localhost:3000`
