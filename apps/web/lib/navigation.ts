@@ -17,5 +17,13 @@ export const roleRoutes = {
     "/lawyer/verification-pending",
     "/notifications"
   ],
-  admin: ["/admin/dashboard", "/admin/laws", "/admin/lawyers", "/notifications"]
+  admin: [
+    "/admin/dashboard",
+    "/admin/laws",
+    "/admin/lawyers",
+    "/admin/users",
+    "/admin/audit",
+    "/admin/notifications",
+    "/notifications"
+  ]
 } as const;

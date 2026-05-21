@@ -303,6 +303,70 @@ export type NotificationRecord = {
   created_at: string;
 };
 
+export type AdminMetrics = {
+  generated_at: string;
+  users_total: number;
+  users_active: number;
+  users_inactive: number;
+  users_by_role: Array<{ label: string; count: number }>;
+  pending_lawyer_verifications: number;
+  law_sections_total: number;
+  law_sections_pending_review: number;
+  cases_total: number;
+  cases_open: number;
+  cases_urgent: number;
+  hearings_upcoming: number;
+  documents_total: number;
+  documents_pending_ocr: number;
+  documents_suspicious: number;
+  legal_aid_pending: number;
+  notifications_failed: number;
+  notifications_unread: number;
+  audit_events_24h: number;
+};
+
+export type AdminUser = {
+  id: string;
+  external_auth_id: string;
+  role: AppUserRole;
+  email: string;
+  phone: string | null;
+  is_active: boolean;
+  is_verified: boolean;
+  last_login_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AdminAuditLog = {
+  id: string;
+  actor_id: string | null;
+  actor_email: string | null;
+  action: string;
+  entity_type: string;
+  entity_id: string | null;
+  metadata: Record<string, unknown>;
+  ip_address: string | null;
+  user_agent: string | null;
+  created_at: string;
+};
+
+export type AdminNotificationFailure = {
+  id: string;
+  user_id: string;
+  user_email: string | null;
+  type: string;
+  title: string;
+  message: string;
+  channel: "email" | "sms" | "in_app";
+  status: "pending" | "sent" | "failed";
+  idempotency_key: string;
+  metadata: Record<string, unknown>;
+  created_at: string;
+};
+
+export type AppUserRole = "citizen" | "lawyer" | "admin" | "org_user";
+
 export async function getHealth() {
   const response = await fetch(`${apiBaseUrl}/health`, {
     cache: "no-store"
@@ -1356,4 +1420,156 @@ export async function markAllNotificationsRead(authToken: string) {
   }
 
   return response.json();
+}
+
+export async function getAdminMetrics(authToken: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/admin/metrics`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to load admin metrics.");
+  }
+
+  return response.json() as Promise<AdminMetrics>;
+}
+
+export async function listAdminUsers(
+  authToken: string,
+  params: {
+    role?: string;
+    is_active?: string;
+    q?: string;
+    limit?: string;
+    offset?: string;
+  } = {}
+) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/admin/users?${toQuery(params)}`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to load admin users.");
+  }
+
+  return response.json() as Promise<{
+    total: number;
+    limit: number;
+    offset: number;
+    users: AdminUser[];
+  }>;
+}
+
+export async function suspendAdminUser(authToken: string, userId: string, payload: unknown) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/admin/users/${userId}/suspend`, {
+    body: JSON.stringify(payload),
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+      "Content-Type": "application/json"
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to suspend the user.");
+  }
+
+  return response.json() as Promise<AdminUser>;
+}
+
+export async function reactivateAdminUser(authToken: string, userId: string, payload: unknown) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/admin/users/${userId}/reactivate`, {
+    body: JSON.stringify(payload),
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+      "Content-Type": "application/json"
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to reactivate the user.");
+  }
+
+  return response.json() as Promise<AdminUser>;
+}
+
+export async function listAdminAuditLogs(
+  authToken: string,
+  params: {
+    action?: string;
+    entity_type?: string;
+    actor_id?: string;
+    created_after?: string;
+    created_before?: string;
+    limit?: string;
+    offset?: string;
+  } = {}
+) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/admin/audit-logs?${toQuery(params)}`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to load audit logs.");
+  }
+
+  return response.json() as Promise<{
+    total: number;
+    limit: number;
+    offset: number;
+    audit_logs: AdminAuditLog[];
+  }>;
+}
+
+export async function listAdminNotificationFailures(
+  authToken: string,
+  params: {
+    channel?: string;
+    notification_type?: string;
+    limit?: string;
+    offset?: string;
+  } = {}
+) {
+  const response = await fetch(
+    `${apiBaseUrl}/api/v1/admin/notifications/failures?${toQuery(params)}`,
+    {
+      cache: "no-store",
+      headers: {
+        Authorization: `Bearer ${authToken}`
+      }
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Unable to load notification failures.");
+  }
+
+  return response.json() as Promise<{
+    total: number;
+    limit: number;
+    offset: number;
+    notifications: AdminNotificationFailure[];
+  }>;
+}
+
+function toQuery(params: Record<string, string | undefined>) {
+  const query = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value) {
+      query.set(key, value);
+    }
+  });
+  return query.toString();
 }

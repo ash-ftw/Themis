@@ -16,6 +16,7 @@ This repository now contains the initial application scaffold based on the PRD a
 10. Phase 6 lawyer verification and legal aid request matching.
 11. Phase 7 secure document repository with signed uploads/downloads and OCR status flow.
 12. Phase 8 RTI draft generation, export workflow, and notification center.
+13. Phase 9 admin dashboards, audit review, metrics, user controls, and hardening.
 
 ## Documentation
 
@@ -56,6 +57,5 @@ Create `.env` from `.env.example` only when you need to override the local defau
 
 ## Build Order
 
-The implementation should continue in this order:
-
-1. Admin dashboard, audit logs, metrics, and hardening.
+The MVP phase plan is implemented through Phase 9. Next work should focus on production deployment
+runbooks, external integrations, and pilot-readiness review.

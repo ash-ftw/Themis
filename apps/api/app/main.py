@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1.router import api_router
 from app.core.config import get_settings
+from app.core.middleware import RateLimitMiddleware, SecurityHeadersMiddleware
 from app.schemas.health import HealthResponse
 
 
@@ -22,6 +23,13 @@ def create_app() -> FastAPI:
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
+    )
+    app.add_middleware(SecurityHeadersMiddleware)
+    app.add_middleware(
+        RateLimitMiddleware,
+        enabled=settings.rate_limit_enabled,
+        limit=settings.rate_limit_requests_per_minute,
+        window_seconds=settings.rate_limit_window_seconds,
     )
 
     app.include_router(api_router, prefix=settings.api_v1_prefix)

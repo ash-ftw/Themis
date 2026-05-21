@@ -92,7 +92,9 @@ Phase 7 document repository and OCR is implemented. The backend includes signed 
 
 Phase 8 RTI and notifications is implemented. The backend includes RTI generate/list/get/update/export/save-to-case endpoints, RTI document metadata creation, notification creation/read/preference endpoints, notification delivery status updates, hearing reminder notification idempotency, and RTI/notification indexes. The frontend includes RTI generation, edit/preview/export/save screens, a notification center with read state, and shell notification navigation.
 
-Phase 9 and later feature endpoints for admin hardening, audit views, metrics, and production testing should be implemented in the phase order defined by `Themis_Implementation_Plan.md`.
+Phase 9 admin, testing, and hardening is implemented. The backend includes admin metrics, user listing, suspend/reactivate actions, audit-log filtering, notification failure review, audit metadata redaction, rate limiting, security headers, admin indexes, and hardening tests. The frontend includes live admin dashboard metrics, user management, audit log review, and notification failure screens.
+
+Production-readiness follow-up should focus on deployment runbooks, backup/restore validation, external email/SMS provider credentials, production object-storage policy review, and pilot E2E execution against a deployed environment.
 
 Seed legal sections after migrations:
 

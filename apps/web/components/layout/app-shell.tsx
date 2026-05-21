@@ -1,4 +1,5 @@
 import {
+  AlertTriangle,
   Bell,
   BookOpen,
   BriefcaseBusiness,
@@ -8,6 +9,7 @@ import {
   LayoutDashboard,
   Search,
   ShieldCheck,
+  Users,
   UserRoundCheck
 } from "lucide-react";
 
@@ -38,7 +40,14 @@ const navigation: Array<{
   { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard, roles: ["admin"] },
   { label: "Law Content", href: "/admin/laws", icon: BookOpen, roles: ["admin"] },
   { label: "Verification", href: "/admin/lawyers", icon: ShieldCheck, roles: ["admin"] },
-  { label: "Audit Logs", href: "/admin/dashboard", icon: FileText, roles: ["admin"] }
+  { label: "Users", href: "/admin/users", icon: Users, roles: ["admin"] },
+  { label: "Audit Logs", href: "/admin/audit", icon: FileText, roles: ["admin"] },
+  {
+    label: "Failures",
+    href: "/admin/notifications",
+    icon: AlertTriangle,
+    roles: ["admin"]
+  }
 ];
 
 export function AppShell({

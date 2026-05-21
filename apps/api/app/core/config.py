@@ -31,6 +31,10 @@ class Settings(BaseSettings):
     object_storage_presign_expires_seconds: int = 900
     document_max_file_size_bytes: int = 10 * 1024 * 1024
 
+    rate_limit_enabled: bool = True
+    rate_limit_requests_per_minute: int = 240
+    rate_limit_window_seconds: int = 60
+
     auth_issuer: str | None = None
     auth_audience: str | None = None
     auth_jwks_url: str | None = None
