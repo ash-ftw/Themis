@@ -268,6 +268,41 @@ export type DocumentPresignUploadResponse = {
   max_file_size: number;
 };
 
+export type DraftStatus = "draft" | "exported" | "saved_to_case";
+
+export type RTIDraft = {
+  id: string;
+  user_id: string;
+  case_id: string | null;
+  public_authority: string;
+  department: string | null;
+  information_requested: string;
+  time_period: string | null;
+  preferred_response_format: string | null;
+  bpl_status: boolean | null;
+  draft_text: string;
+  structured_fields: Record<string, unknown>;
+  status: DraftStatus;
+  pdf_document_id: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type NotificationRecord = {
+  id: string;
+  user_id: string;
+  type: string;
+  title: string;
+  message: string;
+  channel: "email" | "sms" | "in_app";
+  status: "pending" | "sent" | "failed";
+  idempotency_key: string;
+  metadata: Record<string, unknown>;
+  sent_at: string | null;
+  read_at: string | null;
+  created_at: string;
+};
+
 export async function getHealth() {
   const response = await fetch(`${apiBaseUrl}/health`, {
     cache: "no-store"
@@ -1153,4 +1188,172 @@ export async function deleteDocument(authToken: string, documentId: string) {
   }
 
   return response.json() as Promise<DocumentRecord>;
+}
+
+export async function generateRtiDraft(authToken: string, payload: unknown) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/rti/generate`, {
+    body: JSON.stringify(payload),
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+      "Content-Type": "application/json"
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to generate the RTI draft.");
+  }
+
+  return response.json() as Promise<RTIDraft>;
+}
+
+export async function listRtiDrafts(authToken: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/rti`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to load RTI drafts.");
+  }
+
+  return response.json() as Promise<{
+    total: number;
+    drafts: RTIDraft[];
+  }>;
+}
+
+export async function getRtiDraft(authToken: string, draftId: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/rti/${draftId}`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to load the RTI draft.");
+  }
+
+  return response.json() as Promise<RTIDraft>;
+}
+
+export async function updateRtiDraft(authToken: string, draftId: string, payload: unknown) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/rti/${draftId}`, {
+    body: JSON.stringify(payload),
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+      "Content-Type": "application/json"
+    },
+    method: "PATCH"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to update the RTI draft.");
+  }
+
+  return response.json() as Promise<RTIDraft>;
+}
+
+export async function exportRtiPdf(authToken: string, draftId: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/rti/${draftId}/export-pdf`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to queue the RTI PDF export.");
+  }
+
+  return response.json() as Promise<{
+    draft: RTIDraft;
+    document_id: string;
+    status: string;
+    object_key: string;
+  }>;
+}
+
+export async function saveRtiToCase(authToken: string, draftId: string, payload: unknown = {}) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/rti/${draftId}/save-to-case`, {
+    body: JSON.stringify(payload),
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+      "Content-Type": "application/json"
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to save the RTI draft to a case.");
+  }
+
+  return response.json() as Promise<{
+    case: {
+      id: string;
+      title: string;
+      category: string;
+      status: string;
+      created_at: string;
+    };
+    document_id: string;
+  }>;
+}
+
+export async function listNotifications(authToken: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/notifications`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to load notifications.");
+  }
+
+  return response.json() as Promise<{
+    total: number;
+    unread_count: number;
+    notifications: NotificationRecord[];
+  }>;
+}
+
+export async function markNotificationRead(authToken: string, notificationId: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/notifications/${notificationId}/read`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to mark notification read.");
+  }
+
+  return response.json() as Promise<NotificationRecord>;
+}
+
+export async function markAllNotificationsRead(authToken: string) {
+  const response = await fetch(`${apiBaseUrl}/api/v1/notifications/mark-all-read`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    },
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to mark notifications read.");
+  }
+
+  return response.json();
 }

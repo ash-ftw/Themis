@@ -34,7 +34,6 @@ from app.schemas.legal_aid import (
 )
 from app.services.audit import record_audit_log
 from app.services.timeline import add_case_timeline_event
-from app.tasks.notifications import deliver_notification
 
 lawyer_router = APIRouter(prefix="/lawyers", tags=["lawyer profile"])
 admin_router = APIRouter(prefix="/admin/lawyers", tags=["admin lawyer verification"])
@@ -674,5 +673,6 @@ def _create_notification(
     )
     db.add(notification)
     db.flush()
-    deliver_notification(str(notification.id))
+    notification.status = NotificationStatus.SENT
+    notification.sent_at = datetime.now(UTC)
     return notification

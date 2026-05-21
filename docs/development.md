@@ -90,7 +90,9 @@ Phase 6 lawyer verification and legal aid matching is implemented. The backend i
 
 Phase 7 document repository and OCR is implemented. The backend includes signed S3-compatible upload and download URL generation, upload completion metadata validation, document access policy enforcement, case document listing, logical deletion, OCR request/status transitions, audit logging, timeline events, document indexes, and a MinIO bucket initialization service for local development. The frontend includes citizen and lawyer case document upload controls, document lists, OCR/malware/access status labels, extracted-text preview, authorized download redirects, OCR retry actions, and delete actions.
 
-Phase 8 and later feature endpoints for RTI, notifications, and admin hardening should be implemented in the phase order defined by `Themis_Implementation_Plan.md`.
+Phase 8 RTI and notifications is implemented. The backend includes RTI generate/list/get/update/export/save-to-case endpoints, RTI document metadata creation, notification creation/read/preference endpoints, notification delivery status updates, hearing reminder notification idempotency, and RTI/notification indexes. The frontend includes RTI generation, edit/preview/export/save screens, a notification center with read state, and shell notification navigation.
+
+Phase 9 and later feature endpoints for admin hardening, audit views, metrics, and production testing should be implemented in the phase order defined by `Themis_Implementation_Plan.md`.
 
 Seed legal sections after migrations:
 

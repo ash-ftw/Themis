@@ -5,14 +5,17 @@ export const roleRoutes = {
     "/citizen/laws",
     "/citizen/assessments/new",
     "/citizen/complaints/new",
-    "/citizen/profile"
+    "/citizen/rti/new",
+    "/citizen/profile",
+    "/notifications"
   ],
   lawyer: [
     "/lawyer/dashboard",
     "/lawyer/requests",
     "/lawyer/cases",
     "/lawyer/profile",
-    "/lawyer/verification-pending"
+    "/lawyer/verification-pending",
+    "/notifications"
   ],
-  admin: ["/admin/dashboard", "/admin/laws", "/admin/lawyers"]
+  admin: ["/admin/dashboard", "/admin/laws", "/admin/lawyers", "/notifications"]
 } as const;

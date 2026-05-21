@@ -24,6 +24,7 @@ from app.schemas.case import (
     HearingUpdate,
 )
 from app.services.audit import record_audit_log
+from app.services.notifications import create_notification
 from app.services.timeline import add_case_timeline_event
 from app.tasks.reminders import send_hearing_reminder
 
@@ -398,6 +399,19 @@ def schedule_hearing_reminders(
     reminder_key = f"hearing:{hearing.id}:default"
     result = send_hearing_reminder(str(hearing.id), reminder_key)
     hearing.reminder_status = result["status"]
+    recipients = {case.citizen_id}
+    if case.lawyer_id is not None:
+        recipients.add(case.lawyer_id)
+    for recipient_id in recipients:
+        create_notification(
+            db,
+            user_id=recipient_id,
+            notification_type="hearing.reminder",
+            title="Hearing reminder scheduled",
+            message=f"{hearing.court} on {hearing.hearing_date.isoformat()}",
+            idempotency_key=f"hearing:{hearing.id}:{recipient_id}:default",
+            metadata={"hearing_id": str(hearing.id), "case_id": str(case.id)},
+        )
     add_case_timeline_event(
         db,
         case_id=case.id,

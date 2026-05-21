@@ -29,6 +29,7 @@ const navigation: Array<{
     roles: ["citizen"]
   },
   { label: "Complaint", href: "/citizen/complaints/new", icon: FileText, roles: ["citizen"] },
+  { label: "RTI", href: "/citizen/rti/new", icon: FileText, roles: ["citizen"] },
   { label: "Profile", href: "/citizen/profile", icon: UserRoundCheck, roles: ["citizen"] },
   { label: "Dashboard", href: "/lawyer/dashboard", icon: LayoutDashboard, roles: ["lawyer"] },
   { label: "Requests", href: "/lawyer/requests", icon: Gavel, roles: ["lawyer"] },
@@ -102,13 +103,13 @@ export function AppShell({
               >
                 <Search aria-hidden="true" className="h-4 w-4" />
               </button>
-              <button
+              <a
                 aria-label="Notifications"
+                href="/notifications"
                 className="focus-ring inline-flex h-10 w-10 items-center justify-center rounded-md border border-border bg-white text-slate-700 shadow-panel hover:bg-muted"
-                type="button"
               >
                 <Bell aria-hidden="true" className="h-4 w-4" />
-              </button>
+              </a>
             </div>
           </div>
         </header>
