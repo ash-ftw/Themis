@@ -2,7 +2,7 @@ import { BriefcaseBusiness, Gavel, ShieldCheck } from "lucide-react";
 
 import { getHealth } from "@/lib/api";
 
-const roles = [
+const publicRoles = [
   {
     label: "Citizen",
     value: "citizen",
@@ -12,13 +12,14 @@ const roles = [
     label: "Lawyer",
     value: "lawyer",
     icon: Gavel
-  },
-  {
-    label: "Admin",
-    value: "admin",
-    icon: ShieldCheck
   }
 ] as const;
+
+const adminRole = {
+  label: "Admin",
+  value: "admin",
+  icon: ShieldCheck
+} as const;
 
 type LoginSearchParams = Promise<{
   error?: string;
@@ -35,6 +36,7 @@ export default async function LoginPage({ searchParams }: { searchParams: LoginS
     .then(() => true)
     .catch(() => false);
   const errorMessage = params.error ? errorMessages[params.error] : null;
+  const roles = params.role === "admin" ? [...publicRoles, adminRole] : publicRoles;
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
@@ -52,6 +54,12 @@ export default async function LoginPage({ searchParams }: { searchParams: LoginS
             API {apiOnline ? "online" : "offline"}
           </span>
         </div>
+
+        {params.role === "admin" ? (
+          <div className="mb-4 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+            Administrator access is restricted. Continue only with an authorized admin account.
+          </div>
+        ) : null}
 
         {errorMessage ? (
           <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">

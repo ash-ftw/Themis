@@ -24,12 +24,16 @@ export function middleware(request: NextRequest) {
   const session = request.cookies.get("themis-session")?.value;
   const roleCookie = request.cookies.get("themis-role")?.value;
   const role = isAppRole(roleCookie) ? roleCookie : undefined;
+  const requestedRole = roleForPath(pathname);
 
   if (!session || role === undefined) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    const loginUrl = new URL("/login", request.url);
+    if (requestedRole === "admin") {
+      loginUrl.searchParams.set("role", "admin");
+    }
+    return NextResponse.redirect(loginUrl);
   }
 
-  const requestedRole = roleForPath(pathname);
   if (requestedRole !== undefined && requestedRole !== role) {
     return NextResponse.redirect(new URL(roleHome[role], request.url));
   }
