@@ -20,6 +20,8 @@ class Settings(BaseSettings):
     cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:3000"])
 
     database_url: str = "postgresql+psycopg://themis:themis@localhost:5432/themis"
+    database_connect_timeout_seconds: int = 5
+    readiness_socket_timeout_seconds: float = 1.0
     redis_url: str = "redis://localhost:6379/0"
     rabbitmq_url: str = "amqp://themis:themis@localhost:5672//"
 

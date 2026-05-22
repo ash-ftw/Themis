@@ -6,9 +6,13 @@ from sqlalchemy.orm import Session, sessionmaker
 from app.core.config import get_settings
 
 settings = get_settings()
+connect_args: dict[str, object] = {}
+if settings.database_url.startswith("postgresql"):
+    connect_args["connect_timeout"] = settings.database_connect_timeout_seconds
 
 engine = create_engine(
     settings.database_url,
+    connect_args=connect_args,
     pool_pre_ping=True,
 )
 

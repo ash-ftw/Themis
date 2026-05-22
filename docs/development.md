@@ -23,9 +23,10 @@ Local URLs:
 1. Web app: `http://localhost:3000`
 2. API health: `http://localhost:8000/health`
 3. API docs: `http://localhost:8000/docs`
-4. RabbitMQ console: `http://localhost:15672`
-5. MinIO console: `http://localhost:9001`
-6. Mailpit: `http://localhost:8025`
+4. API readiness: `http://localhost:8000/api/v1/health/ready`
+5. RabbitMQ console: `http://localhost:15672`
+6. MinIO console: `http://localhost:9001`
+7. Mailpit: `http://localhost:8025`
 
 Use `localhost` in the browser for the web app. `0.0.0.0` is only the internal bind address used by Docker and should not be opened directly.
 
@@ -94,7 +95,7 @@ Phase 8 RTI and notifications is implemented. The backend includes RTI generate/
 
 Phase 9 admin, testing, and hardening is implemented. The backend includes admin metrics, user listing, suspend/reactivate actions, audit-log filtering, notification failure review, audit metadata redaction, rate limiting, security headers, admin indexes, and hardening tests. The frontend includes live admin dashboard metrics, user management, audit log review, and notification failure screens.
 
-Production-readiness follow-up should focus on deployment runbooks, backup/restore validation, external email/SMS provider credentials, production object-storage policy review, and pilot E2E execution against a deployed environment.
+Phase 10 production readiness is implemented. The backend includes a database-backed readiness endpoint at `/api/v1/health/ready`, and the repository includes production and pilot runbooks in `docs/production-readiness.md` and `docs/pilot-e2e-checklist.md`.
 
 Seed legal sections after migrations:
 

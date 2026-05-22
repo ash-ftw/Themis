@@ -32,6 +32,8 @@ Planning artifacts:
 Development setup:
 
 1. `docs/development.md`
+2. `docs/production-readiness.md`
+3. `docs/pilot-e2e-checklist.md`
 
 ## Quick Start
 
@@ -44,6 +46,7 @@ Then open:
 1. Web app: `http://localhost:3000`
 2. API health: `http://localhost:8000/health`
 3. API docs: `http://localhost:8000/docs`
+4. API readiness: `http://localhost:8000/api/v1/health/ready`
 
 Run database migrations:
 
@@ -57,5 +60,5 @@ Create `.env` from `.env.example` only when you need to override the local defau
 
 ## Build Order
 
-The MVP phase plan is implemented through Phase 9. Next work should focus on production deployment
-runbooks, external integrations, and pilot-readiness review.
+The MVP phase plan is implemented through Phase 9. Phase 10 production-readiness artifacts now
+cover deployment checks, readiness probing, backup/restore review, and pilot E2E validation.

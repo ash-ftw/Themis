@@ -6,3 +6,16 @@ class HealthResponse(BaseModel):
     service: str
     version: str
     environment: str
+
+
+class ReadinessCheck(BaseModel):
+    status: str
+    detail: str | None = None
+
+
+class ReadinessResponse(BaseModel):
+    status: str
+    service: str
+    version: str
+    environment: str
+    checks: dict[str, ReadinessCheck]
