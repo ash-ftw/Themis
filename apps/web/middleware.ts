@@ -13,6 +13,10 @@ const protectedRolePrefixes: Record<AppRole, string> = {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  if (pathname === "/") {
+    return NextResponse.next();
+  }
+
   if (publicPrefixes.some((prefix) => pathname.startsWith(prefix))) {
     return NextResponse.next();
   }
