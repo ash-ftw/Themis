@@ -3,7 +3,15 @@
 
 ## 1. Purpose
 
-This Technical Requirements Document converts the product requirements in `Themis_Revised_Detailed_PRD.md` into an implementation-oriented technical specification. It defines the recommended architecture, service boundaries, data responsibilities, API surface, security model, background jobs, deployment model, and technical acceptance criteria for the Themis platform.
+This Technical Requirements Document defines the system architecture, service boundaries, data responsibilities, API surface, security model, background processing queues, deployment model, and technical acceptance criteria for the Themis platform.
+
+All architectural decisions and module designs in this document directly support and lead to the final target product specification (Functional Requirements, User Stories, Modules, Database Schema & UI Design).
+
+### Team Module Distribution
+- **Frontend Dashboard** (*Abiya John*): Next.js interfaces, guided assessment flow, document upload UI, case timeline views, 3-panel layouts.
+- **Backend API** (*A R Devadathan*): FastAPI REST APIs, authentication, PostgreSQL database schema, Alembic migrations, Celery integration.
+- **Document, OCR & Case Engine** (*Amal K R*): MinIO storage repository, signed uploads, OCR pipeline, RTI/complaint generation, attorney-matching engine, case/hearing timeline automation.
+- **Shared Responsibilities**: Docker Compose stack, CI/CD pipeline, system integration, migration reviews, testing and cloud deployment.
 
 Themis is a legal information and workflow-support system. It must not present itself as a substitute for qualified legal advice, police portals, court systems, or official government filing systems.
 

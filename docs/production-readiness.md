@@ -1,8 +1,10 @@
 # Production Readiness
 
-This runbook turns the local MVP into a deployable pilot target. The preferred first production
-shape is AWS Mumbai (`ap-south-1`) on ECS/Fargate with managed PostgreSQL, managed Redis,
-S3-compatible private object storage, RabbitMQ or Amazon MQ, and separately managed secrets.
+This runbook turns the local MVP into a production deployment for the **Themis** platform.
+
+The preferred production deployment shape is AWS Mumbai (`ap-south-1`) on ECS/Fargate with managed PostgreSQL, managed Redis, S3-compatible private object storage, RabbitMQ or Amazon MQ, and separately managed secrets.
+
+---
 
 ## Required Services
 

@@ -1,6 +1,15 @@
-# Development
+# Development Guide
 
-## Prerequisites
+This document provides setup instructions and development scope guidelines for **Themis**.
+
+All development activities and system components are designed to deliver the final target product.
+
+### Team Module Distribution
+- **Frontend Dashboard** (*Abiya John*): Next.js App Router, Shadcn UI, Tailwind CSS design tokens (Deep Navy, Warm White, Justice Gold, Alert Terracotta), 3-panel citizen layout, Case Journey Timeline.
+- **Backend API** (*A R Devadathan*): FastAPI framework, Pydantic v2 validation, SQLAlchemy 2.x ORM, PostgreSQL DDL migrations (Alembic), REST endpoints, JWT authentication.
+- **Document, OCR & Case Engine** (*Amal K R*): MinIO storage bucket integration, Celery async task queue, RabbitMQ broker, Tesseract OCR extraction, automated PDF generation (complaint/RTI), attorney matching engine.
+
+---
 
 1. Docker Desktop or compatible Docker Engine.
 2. Node.js 22+ if running the frontend outside Docker.

@@ -8,31 +8,26 @@
 | Product Name | Themis |
 | Product Type | Legal aid, legal knowledge, document management, and case-support platform |
 | Primary Region | India |
-| Target Users | Citizens, Lawyers, Admins, Legal Aid Organizations |
-| Document Version | 2.0 — Revised Production-Oriented PRD |
+| Target Users | Citizens, Attorneys, Legal Aid Coordinators, System Administrators |
+| Project Team | **A R Devadathan** (Backend API), **Abiya John** (Frontend Dashboard), **Amal K R** (Document, OCR & Case Engine) |
+| Target Blueprint | Comprehensive Specification (Functional Requirements, User Stories, Modules, Database Schema & UI Design) |
+| Document Version | 2.0 — Production-Oriented PRD |
 | Primary Goal | Help Indian citizens understand legal issues, prepare structured legal documents, connect with verified legal aid, and manage case-related information securely |
-| Project Suitability | MCA / Final-Year Major Project, scalable into real-world pilot |
-| Recommended Architecture | Modular monolith with background workers and clean service boundaries |
+| Recommended Architecture | FastAPI backend, Next.js frontend, PostgreSQL, MinIO object storage, Celery + RabbitMQ async workers |
 | Recommended Deployment | AWS Mumbai region using ECS/Fargate for production; Docker Compose for local development |
 
 ---
 
 ## 1. Executive Summary
 
-Themis is a full-stack Indian legal aid and legal knowledge platform designed to help citizens understand legal provisions, assess legal issues, generate structured complaint and RTI drafts, connect with verified lawyers, organize case documents, track hearings, and receive reminders.
+Themis is a production-ready Indian legal aid, document automation, and case-management platform designed to bridge the gap between citizens, legal professionals, and legal aid services. Architected using a FastAPI backend and Next.js frontend, it integrates relational data management via PostgreSQL with asynchronous task queues powered by Celery and RabbitMQ, alongside secure MinIO object storage for legal file assets.
 
-The platform does **not** replace lawyers, courts, police stations, or official government portals. It acts as a legal empowerment, documentation, and workflow-support layer.
+This PRD formalizes the requirements and design system, ensuring all development efforts lead directly to the final target product.
 
-This revised PRD upgrades Themis from an academic full-stack project into a more production-ready legal-tech system by introducing:
-
-1. Managed authentication instead of fully custom authentication.
-2. Secure private object storage for legal documents.
-3. Durable background processing for OCR, reminders, exports, and notifications.
-4. PostgreSQL-first legal search with a path to OpenSearch later.
-5. Clear API separation between REST write flows and optional GraphQL read aggregation.
-6. Stronger privacy, security, audit, and compliance controls.
-7. A deployment model that avoids premature Kubernetes while still remaining scalable.
-8. A phased roadmap suitable for both MCA project delivery and future real-world pilot.
+The platform is structured into three core modules owned by the project team:
+1. **Frontend Dashboard** (*Abiya John*): Design citizen and attorney-facing interfaces, guided assessment flow, document upload UI, case timeline views, responsive 3-panel layouts, and state management.
+2. **Backend API** (*A R Devadathan*): Develop FastAPI services, authentication, REST APIs, database schema, Alembic migrations, Celery task integration, and business logic.
+3. **Document, OCR & Case Management Engine** (*Amal K R*): Implement MinIO document repository, signed uploads, OCR processing pipeline, RTI/complaint document generation, attorney-matching engine, and case/hearing timeline automation.
 
 ---
 

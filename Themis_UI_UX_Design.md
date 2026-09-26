@@ -1,75 +1,66 @@
-# UI/UX Design
-# Themis
+# UI/UX Design Specification
+# Themis — Digital Platform for Legal Aid, Document Automation, and Case Management
 
 ## 1. Product Experience Direction
 
-Themis should feel like a serious public-service legal support tool: calm, clear, trustworthy, and efficient. The interface should prioritize structured guidance, readable legal explanations, and secure case organization over decorative presentation.
+This UI/UX specification formalizes the design system and user interface patterns for **Themis**, directly leading to the target user experience.
 
-The first screen after login should be the relevant role dashboard, not a marketing landing page.
+Module Ownership:
+- **Frontend Dashboard Lead**: **Abiya John** (Citizen & attorney interfaces, guided assessment flow, document upload UI, case timeline views, responsive layouts, and state management).
 
-## 2. Design Principles
+Themis is designed to feel approachable, formal, and trustworthy rather than intimidating, since many citizens have limited legal or technical literacy. The design favors plain language, generous whitespace, and a calm visual tone appropriate for a civic legal-aid service, while giving attorneys and coordinators a data-dense, professional case-management workspace.
 
-1. Use plain language and define legal terms near where they appear.
-2. Make legal disclaimers visible without blocking every small action.
-3. Use step-by-step forms for assessment, complaint, RTI, and lawyer onboarding.
-4. Keep case deadlines, hearings, and pending lawyer responses visually prominent.
-5. Make document privacy and access state clear.
-6. Provide save-and-resume for long legal workflows.
-7. Design mobile layouts first for citizen workflows.
-8. Keep admin and lawyer workflows dense, scannable, and action-oriented.
-9. Use accessible contrast, labels, focus states, and keyboard navigation.
-10. Avoid implying certainty in legal suggestions.
+---
 
-## 3. Visual System
+## 2. Visual System & Design Tokens
 
-### 3.1 Tone
+### 2.1 Color Palette
 
-The interface should use restrained colors and practical layouts. It should not feel like a generic SaaS landing page or a decorative portfolio site.
+The interface uses a restrained, trust-oriented palette with exact design tokens:
 
-Recommended palette:
+| Token Name | Hex Code | Purpose & Usage |
+|---|---|---|
+| **Deep Navy** | `#1B2A41` | Primary color for headers, navigation rails, and key structural actions, conveying institutional trust. |
+| **Warm White** | `#FAF9F6` | Primary background color providing high readability and an approachable feel. |
+| **Justice Gold** | `#C9A24B` | Accent color for completed timeline milestones, active badges, key highlights, and the Themis emblem. |
+| **Slate Grey** | `#5B6570` | Secondary text, borders, and UI chrome. |
+| **Alert Terracotta** | `#B5502D` | High-priority state for deadlines, overdue actions, active milestone focus, and critical case alerts. |
 
-| Role | Color Use |
-|---|---|
-| Base | Neutral white, off-white, slate text, light gray borders |
-| Primary action | Deep teal or blue for trusted primary actions |
-| Legal knowledge | Indigo accent used sparingly |
-| Deadlines and urgent matters | Amber and red status colors |
-| Verified/success states | Green status color |
-| Disabled/archived | Neutral gray |
+### 2.2 Typography
 
-### 3.2 Typography
+- **Headings & Wordmark**: **Source Serif 4** — Lends a formal, legal-document feel appropriate for a civic legal institution.
+- **Body & Controls**: **Inter** — Prioritizes clarity, legibility, and high readability across forms, case data tables, and guided steps.
 
-1. Use a highly readable sans-serif font.
-2. Keep body text at 16px minimum for citizen-facing content.
-3. Use compact table typography for admin and lawyer dashboards.
-4. Do not use hero-scale headings inside dashboards or cards.
-5. Avoid all-caps labels except short status badges.
+---
 
-### 3.3 Components
+## 3. Layout Architecture & Signature Visual Elements
 
-Use Shadcn UI and Tailwind CSS for:
+### 3.1 Citizen 3-Panel Layout
 
-1. App shell.
-2. Navigation sidebar.
-3. Top bar.
-4. Breadcrumbs.
-5. Cards for repeated items only.
-6. Tables.
-7. Tabs.
-8. Stepper forms.
-9. Dialogs.
-10. Drawers for details.
-11. Toasts.
-12. Badges.
-13. Alerts.
-14. Tooltips.
-15. Empty states.
-16. File upload dropzones.
-17. PDF preview panels.
+The citizen workspace follows a structured three-panel layout:
+1. **Left Panel (Navigation Rail)**: Persistent navigation between *Legal Search*, *Guided Assessment*, *My Documents*, and *My Case*.
+2. **Center Panel (Primary Workspace)**: Dynamic central workspace rendering assessment questions, generated document previews (complaint / RTI), or the case timeline.
+3. **Right Panel (Contextual Summary)**: Case summary card, assigned attorney details, and upcoming hearing countdown reminders.
 
-Do not nest cards inside cards. Use full-width sections or split panes for complex workflows.
+### 3.2 Signature Visual Element: Case Journey Timeline
 
-## 4. Information Architecture
+The signature visual element of the platform is the **Case Journey Timeline** — a vertical, milestone-based progress tracker showing each stage of a citizen's case:
+
+$$\text{Assessment} \longrightarrow \text{Document Filed} \longrightarrow \text{Attorney Assigned} \longrightarrow \text{Hearing Scheduled} \longrightarrow \text{Resolved}$$
+
+- **Completed Milestones**: Highlighted in **Justice Gold (`#C9A24B`)**.
+- **Active Stage**: Gently pulsing ring highlighted in **Alert Terracotta (`#B5502D`)**.
+- **Upcoming Hearing Dates**: Displayed with prominent Alert Terracotta badges when approaching, giving citizens an immediate, reassuring sense of progress.
+
+### 3.3 Guided Assessment 2-Panel Layout
+- **Left Rail**: Deep Navy (`#1B2A41`) persistent progress indicator showing completed/remaining steps.
+- **Right Panel**: Plain-language single-question step card with icon-led answer choices to minimize cognitive load.
+
+### 3.4 Attorney Case Management Workspace
+- **Header**: Data-dense KPI summary stat cards (Active Cases, Pending Requests, Upcoming Hearings).
+- **Body**: Filterable, sortable data grid table with real-time status badges and hearing dates in Alert Terracotta.
+
+---
 
 ```text
 /login

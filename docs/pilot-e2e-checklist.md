@@ -1,7 +1,10 @@
 # Pilot E2E Checklist
 
-Run these checks against a deployed pilot environment after migrations and seed data are complete.
+Run these end-to-end verification checks against a deployed environment to validate all functional workflows.
+
 Use test users and test documents only.
+
+---
 
 ## Citizen Journey
 

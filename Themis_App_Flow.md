@@ -1,14 +1,22 @@
-# App Flow
-# Themis
+# Application Workflow Specification
+# Themis — User Journeys, Operational Workflows & Actor Paths
 
-## 1. App Flow Overview
+## 1. App Flow Overview & Target Alignment
 
-Themis has four main actor paths:
+This document outlines the user interaction paths, actor workflows, and asynchronous system interactions for **Themis**, directly implementing the core user journeys and module interactions.
 
-1. Citizen path: legal search, issue assessment, drafts, cases, documents, hearings, legal aid, RTI.
-2. Lawyer path: registration, verification, request handling, assigned case work, hearings.
-3. Admin path: verification, legal content management, users, audit logs, metrics.
-4. Background system path: OCR, PDF export, reminders, notifications, audit events.
+### Platform Actors
+1. **Citizen**: Natural-language legal search, guided issue assessment, automated RTI/complaint draft generation, secure document uploads, case tracking via the **Case Journey Timeline**, and legal aid matching requests.
+2. **Attorney**: Bar Council credential verification, caseload management, reviewing assigned citizen case files, updating hearing outcomes, and scheduling case milestones.
+3. **Legal Aid Coordinator**: Reviewing attorney verification submissions, monitoring caseload distribution across attorneys, and managing legal aid allocation.
+4. **Administrator**: Platform audit log investigation, system security monitoring, legal knowledge base maintenance, and operational metrics tracking.
+
+### Module Ownership & Architecture
+- **Frontend Dashboard** (*Abiya John*): Renders the 3-panel citizen layout, Case Journey Timeline, 2-panel guided assessment, and attorney data-dense workspace.
+- **Backend API** (*A R Devadathan*): Manages authentication, REST API endpoints, business logic validation, and database operations.
+- **Document, OCR & Case Engine** (*Amal K R*): Handles MinIO direct signed uploads, Celery Tesseract OCR pipeline, PDF document generation, and attorney matching rules.
+
+---
 
 ## 2. Global Authentication Flow
 
