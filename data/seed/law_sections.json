@@ -1,42 +1,361 @@
 [
   {
-    "act_name": "Bharatiya Nyaya Sanhita, 2023",
-    "section_number": "316",
-    "title": "Criminal breach of trust",
-    "original_text": "Whoever, being in any manner entrusted with property, dishonestly misappropriates or converts that property to their own use commits criminal breach of trust.",
-    "plain_language": "This applies when someone is trusted with property or money and dishonestly uses it for themselves instead of the purpose for which it was entrusted.",
+    "act_name": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "section_number": "302 (IPC) / 103 (BNS)",
+    "title": "Punishment for Murder",
+    "original_text": "Whoever commits murder shall be punished with death, or imprisonment for life, and shall also be liable to fine.",
+    "plain_language": "Applies when a person intentionally causes the death of another person or causes bodily harm knowing it is likely to cause death.",
     "example_scenarios": [
-      "An agent receives money to deposit for a client but keeps it.",
-      "A person entrusted with goods for safekeeping sells them without permission."
+      "A person intentionally attacks another with a deadly weapon with deliberate intent to cause death.",
+      "Acts committed with knowledge that death is the almost certain result."
     ],
-    "punishment": "Punishment depends on the role of the person entrusted and the facts of the case.",
+    "punishment": "Death or imprisonment for life, and fine.",
     "is_bailable": false,
     "is_cognizable": true,
-    "ipc_mapping": "IPC 405/406",
-    "related_sections": ["318"],
-    "category_tags": ["consumer_complaint", "property", "fraud"],
-    "jurisdiction_notes": "Police procedure and forum choice depend on the place of incident and amount involved.",
-    "source_reference": "Bharatiya Nyaya Sanhita, 2023",
+    "ipc_mapping": "IPC 302 / BNS 103",
+    "related_sections": ["300", "304", "307"],
+    "category_tags": ["criminal", "homicide", "violent_crime"],
+    "jurisdiction_notes": "Court of Session.",
+    "source_reference": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
     "review_status": "reviewed"
   },
   {
-    "act_name": "Bharatiya Nyaya Sanhita, 2023",
-    "section_number": "318",
-    "title": "Cheating",
-    "original_text": "Whoever deceives any person and fraudulently or dishonestly induces that person to deliver property, or intentionally induces an act or omission causing harm, commits cheating.",
-    "plain_language": "This covers deception that causes someone to give money, property, consent, or take an action they would not have taken if the truth were known.",
+    "act_name": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "section_number": "304A (IPC) / 106 (BNS)",
+    "title": "Causing Death by Negligence",
+    "original_text": "Whoever causes the death of any person by doing any rash or negligent act not amounting to culpable homicide, shall be punished with imprisonment of either description for a term which may extend to two years, or with fine, or with both.",
+    "plain_language": "Applies when a person causes death due to extreme carelessness, reckless driving, or failure to exercise reasonable caution without intention to kill.",
     "example_scenarios": [
-      "A seller takes payment for a product while never intending to deliver it.",
-      "A person uses false identity details to obtain money."
+      "A driver over-speeds, passes a red light, and hits a pedestrian causing death.",
+      "A construction manager neglects basic safety gear causing a fatal accident."
     ],
-    "punishment": "Punishment varies by the kind of cheating and the resulting harm.",
+    "punishment": "Imprisonment up to 2 years, or fine, or both.",
+    "is_bailable": true,
+    "is_cognizable": true,
+    "ipc_mapping": "IPC 304A / BNS 106",
+    "related_sections": ["279", "337", "338"],
+    "category_tags": ["criminal", "road_accident", "negligence"],
+    "jurisdiction_notes": "Magistrate of First Class.",
+    "source_reference": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "review_status": "reviewed"
+  },
+  {
+    "act_name": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "section_number": "307 (IPC) / 109 (BNS)",
+    "title": "Attempt to Murder",
+    "original_text": "Whoever does any act with such intention or knowledge, and under such circumstances that, if he by that act caused death, he would be guilty of murder, shall be punished with imprisonment of either description for a term which may extend to ten years, and shall also be liable to fine.",
+    "plain_language": "Applies when someone takes an action attempting to kill another person, but the victim survives.",
+    "example_scenarios": [
+      "Firing a gun at someone at close range, but the victim survives after medical intervention.",
+      "Stabbing a person in vital organs with intent to kill."
+    ],
+    "punishment": "Imprisonment up to 10 years and fine; if hurt is caused, up to life imprisonment.",
     "is_bailable": false,
     "is_cognizable": true,
-    "ipc_mapping": "IPC 415/420",
-    "related_sections": ["316"],
+    "ipc_mapping": "IPC 307 / BNS 109",
+    "related_sections": ["300", "302", "326"],
+    "category_tags": ["criminal", "attempt_to_kill", "violent_crime"],
+    "jurisdiction_notes": "Court of Session.",
+    "source_reference": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "review_status": "reviewed"
+  },
+  {
+    "act_name": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "section_number": "323 (IPC) / 115 (BNS)",
+    "title": "Voluntarily Causing Hurt",
+    "original_text": "Whoever, except in the case provided for by section 334, voluntarily causes hurt, shall be punished with imprisonment of either description for a term which may extend to one year, or with fine which may extend to one thousand rupees, or with both.",
+    "plain_language": "Applies when someone intentionally causes physical pain, bodily harm, or illness to another person.",
+    "example_scenarios": [
+      "Slapping or punching someone during a minor verbal argument.",
+      "Pushing someone causing minor bruises."
+    ],
+    "punishment": "Imprisonment up to 1 year, or fine up to ₹1,000, or both.",
+    "is_bailable": true,
+    "is_cognizable": false,
+    "ipc_mapping": "IPC 323 / BNS 115",
+    "related_sections": ["319", "321", "324", "325"],
+    "category_tags": ["assault", "hurt", "minor_offense"],
+    "jurisdiction_notes": "Any Magistrate.",
+    "source_reference": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "review_status": "reviewed"
+  },
+  {
+    "act_name": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "section_number": "325 (IPC) / 117 (BNS)",
+    "title": "Voluntarily Causing Grievous Hurt",
+    "original_text": "Whoever, except in the case provided for by section 335, voluntarily causes grievous hurt, shall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine.",
+    "plain_language": "Applies when someone causes severe bodily injury like fracture of bones, permanent loss of sight/hearing, disfigurement, or life-threatening harm.",
+    "example_scenarios": [
+      "Attacking a person with a heavy rod breaking their arm or leg.",
+      "Striking someone's eye causing permanent blindness."
+    ],
+    "punishment": "Imprisonment up to 7 years and fine.",
+    "is_bailable": true,
+    "is_cognizable": true,
+    "ipc_mapping": "IPC 325 / BNS 117",
+    "related_sections": ["320", "322", "326"],
+    "category_tags": ["assault", "grievous_hurt", "violent_crime"],
+    "jurisdiction_notes": "Any Magistrate.",
+    "source_reference": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "review_status": "reviewed"
+  },
+  {
+    "act_name": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "section_number": "341 (IPC) / 126 (BNS)",
+    "title": "Wrongful Restraint",
+    "original_text": "Whoever wrongfully restrains any person shall be punished with simple imprisonment for a term which may extend to one month, or with fine which may extend to five hundred rupees, or with both.",
+    "plain_language": "Applies when someone intentionally prevents another person from moving in a direction where they have a legal right to go.",
+    "example_scenarios": [
+      "Blocking a hallway or doorway to physically prevent someone from exiting.",
+      "Stopping a vehicle on a public road to block someone's path."
+    ],
+    "punishment": "Imprisonment up to 1 month, or fine up to ₹500, or both.",
+    "is_bailable": true,
+    "is_cognizable": true,
+    "ipc_mapping": "IPC 341 / BNS 126",
+    "related_sections": ["339", "340", "342"],
+    "category_tags": ["restraint", "liberty", "minor_offense"],
+    "jurisdiction_notes": "Any Magistrate.",
+    "source_reference": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "review_status": "reviewed"
+  },
+  {
+    "act_name": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "section_number": "354 (IPC) / 74 (BNS)",
+    "title": "Assault or Criminal Force to Woman with Intent to Outrage Her Modesty",
+    "original_text": "Whoever assaults or uses criminal force to any woman, intending to outrage or knowing it to be likely that he will thereby outrage her modesty, shall be punished with imprisonment of either description for a term which shall not be less than one year but which may extend to five years, and shall also be liable to fine.",
+    "plain_language": "Applies when physical force or assault is used against a woman with the intention or knowledge of violating her modesty.",
+    "example_scenarios": [
+      "Inappropriate physical contact or groping in a public or private setting.",
+      "Pulling a woman's clothing or physically grabbing her against her consent."
+    ],
+    "punishment": "Imprisonment between 1 to 5 years, and fine.",
+    "is_bailable": false,
+    "is_cognizable": true,
+    "ipc_mapping": "IPC 354 / BNS 74",
+    "related_sections": ["354A", "354B", "354C", "354D", "509"],
+    "category_tags": ["women_safety", "harassment", "modesty"],
+    "jurisdiction_notes": "Any Magistrate.",
+    "source_reference": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "review_status": "reviewed"
+  },
+  {
+    "act_name": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "section_number": "354A (IPC) / 75 (BNS)",
+    "title": "Sexual Harassment",
+    "original_text": "A man committing physical contact, unwelcome explicit sexual overtures, demanding sexual favours, or showing pornography against a woman's will shall be guilty of the offence of sexual harassment.",
+    "plain_language": "Covers unwelcome physical contact, demands for sexual favors, showing pornography without consent, or making sexually colored remarks.",
+    "example_scenarios": [
+      "Repeated unwelcome sexual remarks or demands made at workplace or educational institution.",
+      "Showing sexually explicit images/videos to someone without their consent."
+    ],
+    "punishment": "Imprisonment up to 3 years, or fine, or both.",
+    "is_bailable": true,
+    "is_cognizable": true,
+    "ipc_mapping": "IPC 354A / BNS 75",
+    "related_sections": ["354", "354D", "509"],
+    "category_tags": ["women_safety", "sexual_harassment", "workplace"],
+    "jurisdiction_notes": "Any Magistrate.",
+    "source_reference": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "review_status": "reviewed"
+  },
+  {
+    "act_name": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "section_number": "376 (IPC) / 64 (BNS)",
+    "title": "Punishment for Rape",
+    "original_text": "Whoever commits rape shall be punished with rigorous imprisonment of either description for a term which shall not be less than ten years, but which may extend to imprisonment for life, and shall also be liable to fine.",
+    "plain_language": "Applies to non-consensual sexual acts under coercion, force, intoxication, deception, or absence of valid consent.",
+    "example_scenarios": [
+      "Sexual assault committed without consent or under threat of physical harm."
+    ],
+    "punishment": "Rigorous imprisonment for at least 10 years up to life, and fine.",
+    "is_bailable": false,
+    "is_cognizable": true,
+    "ipc_mapping": "IPC 376 / BNS 64",
+    "related_sections": ["375", "376A", "376D"],
+    "category_tags": ["women_safety", "sexual_assault", "severe_crime"],
+    "jurisdiction_notes": "Court of Session.",
+    "source_reference": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "review_status": "reviewed"
+  },
+  {
+    "act_name": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "section_number": "378 / 379 (IPC) / 303 (BNS)",
+    "title": "Theft",
+    "original_text": "Whoever, intending to take dishonestly any movable property out of the possession of any person without that person's consent, moves that property in order to such taking, commits theft.",
+    "plain_language": "Applies when someone dishonestly takes another person's movable property without their knowledge or consent.",
+    "example_scenarios": [
+      "Stealing a laptop or wallet from an unattended desk or bag.",
+      "Taking a parked vehicle without permission."
+    ],
+    "punishment": "Imprisonment up to 3 years, or fine, or both.",
+    "is_bailable": true,
+    "is_cognizable": true,
+    "ipc_mapping": "IPC 378/379 / BNS 303",
+    "related_sections": ["380", "381", "411"],
+    "category_tags": ["theft", "property", "crime"],
+    "jurisdiction_notes": "Any Magistrate.",
+    "source_reference": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "review_status": "reviewed"
+  },
+  {
+    "act_name": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "section_number": "383 / 384 (IPC) / 308 (BNS)",
+    "title": "Extortion",
+    "original_text": "Whoever intentionally puts any person in fear of any injury to that person, or to any other, and thereby dishonestly induces the person so put in fear to deliver to any person any property or valuable security, commits extortion.",
+    "plain_language": "Applies when someone blackmails or threatens harm to force a victim to surrender money, property, or documents.",
+    "example_scenarios": [
+      "Threatening to release private photos unless money is paid.",
+      "Demanding protection money by threatening physical harm to a business."
+    ],
+    "punishment": "Imprisonment up to 3 years, or fine, or both.",
+    "is_bailable": false,
+    "is_cognizable": true,
+    "ipc_mapping": "IPC 383/384 / BNS 308",
+    "related_sections": ["385", "386", "387"],
+    "category_tags": ["extortion", "blackmail", "property"],
+    "jurisdiction_notes": "Any Magistrate.",
+    "source_reference": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "review_status": "reviewed"
+  },
+  {
+    "act_name": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "section_number": "405 / 406 (IPC) / 316 (BNS)",
+    "title": "Criminal Breach of Trust",
+    "original_text": "Whoever, being in any manner entrusted with property, dishonestly misappropriates or converts that property to their own use commits criminal breach of trust.",
+    "plain_language": "Applies when someone who was trusted with property or money dishonestly uses it for themselves instead of its agreed purpose.",
+    "example_scenarios": [
+      "An employee or financial agent takes company funds for personal spending.",
+      "A bailee entrusted with jewellery sells it without authorization."
+    ],
+    "punishment": "Imprisonment up to 3 years, or fine, or both.",
+    "is_bailable": false,
+    "is_cognizable": true,
+    "ipc_mapping": "IPC 405/406 / BNS 316",
+    "related_sections": ["407", "408", "409"],
+    "category_tags": ["consumer_complaint", "property", "fraud", "financial"],
+    "jurisdiction_notes": "Magistrate of First Class.",
+    "source_reference": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "review_status": "reviewed"
+  },
+  {
+    "act_name": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "section_number": "415 / 420 (IPC) / 318 (BNS)",
+    "title": "Cheating and Dishonestly Inducing Delivery of Property",
+    "original_text": "Whoever deceives any person and fraudulently or dishonestly induces that person to deliver property, or intentionally induces an act or omission causing harm, commits cheating.",
+    "plain_language": "Covers deception that induces a victim to part with money, property, or consent based on false promises or fraudulent misrepresentation.",
+    "example_scenarios": [
+      "An e-commerce seller takes payment online for goods while knowing they do not exist.",
+      "A fraudster promises guaranteed job placements in exchange for upfront cash."
+    ],
+    "punishment": "Imprisonment up to 7 years and fine.",
+    "is_bailable": false,
+    "is_cognizable": true,
+    "ipc_mapping": "IPC 415/420 / BNS 318",
+    "related_sections": ["416", "417", "418", "419"],
     "category_tags": ["consumer_complaint", "cyber_fraud", "fraud"],
-    "jurisdiction_notes": "Cyber-related incidents may also require reporting through cyber crime channels.",
-    "source_reference": "Bharatiya Nyaya Sanhita, 2023",
+    "jurisdiction_notes": "Magistrate of First Class.",
+    "source_reference": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "review_status": "reviewed"
+  },
+  {
+    "act_name": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "section_number": "441 / 447 (IPC) / 329 (BNS)",
+    "title": "Criminal Trespass",
+    "original_text": "Whoever enters into or upon property in the possession of another with intent to commit an offence or to intimidate, insult or annoy any person in possession of such property commits criminal trespass.",
+    "plain_language": "Applies when someone unlawfully enters another person's house, land, or private premises to commit an offense, threaten, or harass them.",
+    "example_scenarios": [
+      "Breaking into a private compound to intimidate the homeowner.",
+      "Encroaching physically into locked private property without legal right."
+    ],
+    "punishment": "Imprisonment up to 3 months, or fine up to ₹500, or both.",
+    "is_bailable": true,
+    "is_cognizable": true,
+    "ipc_mapping": "IPC 441/447 / BNS 329",
+    "related_sections": ["442", "448", "452"],
+    "category_tags": ["property", "trespass", "land_dispute"],
+    "jurisdiction_notes": "Any Magistrate.",
+    "source_reference": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "review_status": "reviewed"
+  },
+  {
+    "act_name": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "section_number": "463 / 465 (IPC) / 336 (BNS)",
+    "title": "Forgery",
+    "original_text": "Whoever makes any false document or false electronic record with intent to cause damage or injury, or to support any claim or title, commits forgery.",
+    "plain_language": "Applies when someone creates fake signatures, altered contracts, counterfeit identity cards, or forged land records to deceive or defraud.",
+    "example_scenarios": [
+      "Forging a landlord's signature on a property sale agreement.",
+      "Creating fake academic degree certificates to obtain employment."
+    ],
+    "punishment": "Imprisonment up to 2 years, or fine, or both.",
+    "is_bailable": true,
+    "is_cognizable": false,
+    "ipc_mapping": "IPC 463/465 / BNS 336",
+    "related_sections": ["468", "471"],
+    "category_tags": ["forgery", "fraud", "documents"],
+    "jurisdiction_notes": "Magistrate of First Class.",
+    "source_reference": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "review_status": "reviewed"
+  },
+  {
+    "act_name": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "section_number": "498A (IPC) / 85 (BNS)",
+    "title": "Husband or Relative of Husband Subjecting Woman to Cruelty",
+    "original_text": "Whoever, being the husband or the relative of the husband of a woman, subjects such woman to cruelty shall be punished with imprisonment for a term which may extend to three years and shall also be liable to fine.",
+    "plain_language": "Protects married women against physical or mental harassment, domestic abuse, or coercive dowry demands by husband or in-laws.",
+    "example_scenarios": [
+      "Demanding additional cash/property from a bride's family accompanied by physical or emotional abuse.",
+      "Repeated domestic harassment causing danger to life, limb, or mental health."
+    ],
+    "punishment": "Imprisonment up to 3 years and fine.",
+    "is_bailable": false,
+    "is_cognizable": true,
+    "ipc_mapping": "IPC 498A / BNS 85",
+    "related_sections": ["304B", "406"],
+    "category_tags": ["domestic_violence", "women_safety", "matrimonial"],
+    "jurisdiction_notes": "Magistrate of First Class.",
+    "source_reference": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "review_status": "reviewed"
+  },
+  {
+    "act_name": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "section_number": "503 / 506 (IPC) / 351 (BNS)",
+    "title": "Criminal Intimidation",
+    "original_text": "Whoever threatens another with any injury to his person, reputation or property, with intent to cause alarm to that person, commits criminal intimidation.",
+    "plain_language": "Applies when someone threatens death, severe injury, property destruction, or ruin of reputation to alarm or force a person to do something.",
+    "example_scenarios": [
+      "Threatening a witness over phone to prevent them from testifying in court.",
+      "Sending threatening messages stating 'I will burn your house down'."
+    ],
+    "punishment": "Imprisonment up to 2 years, or fine, or both; if threat is to cause death, up to 7 years.",
+    "is_bailable": true,
+    "is_cognizable": false,
+    "ipc_mapping": "IPC 503/506 / BNS 351",
+    "related_sections": ["504", "507"],
+    "category_tags": ["threat", "harassment", "criminal"],
+    "jurisdiction_notes": "Any Magistrate.",
+    "source_reference": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "review_status": "reviewed"
+  },
+  {
+    "act_name": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
+    "section_number": "509 (IPC) / 79 (BNS)",
+    "title": "Word, Gesture or Act Intended to Insult the Modesty of a Woman",
+    "original_text": "Whoever, intending to insult the modesty of any woman, utters any word, makes any sound or gesture, or exhibits any object, intending that such word or sound shall be heard, or that such gesture or object shall be seen, or intrudes upon the privacy of such woman, shall be punished with simple imprisonment for a term which may extend to three years, and also with fine.",
+    "plain_language": "Applies to catcalling, abusive language, obscene gestures, or invading a woman's privacy with intent to insult her modesty.",
+    "example_scenarios": [
+      "Uttering vulgar remarks or making inappropriate obscene gestures at a woman in a public street.",
+      "Peeping into a private living area or invading personal privacy."
+    ],
+    "punishment": "Simple imprisonment up to 3 years and fine.",
+    "is_bailable": true,
+    "is_cognizable": true,
+    "ipc_mapping": "IPC 509 / BNS 79",
+    "related_sections": ["354", "354A", "354D"],
+    "category_tags": ["women_safety", "harassment", "public_decency"],
+    "jurisdiction_notes": "Any Magistrate.",
+    "source_reference": "Indian Penal Code, 1860 / Bharatiya Nyaya Sanhita, 2023",
     "review_status": "reviewed"
   },
   {
@@ -77,6 +396,26 @@
     "category_tags": ["rti_request", "public_records"],
     "jurisdiction_notes": "The request should be sent to the correct public information officer.",
     "source_reference": "Right to Information Act, 2005",
+    "review_status": "reviewed"
+  },
+  {
+    "act_name": "Information Technology Act, 2000",
+    "section_number": "66D",
+    "title": "Punishment for Cheating by Personation by Using Computer Resource",
+    "original_text": "Whoever, by means of any communication device or computer resource cheats by personation, shall be punished with imprisonment of either description for a term which may extend to three years and shall also be liable to fine which may extend to one lakh rupees.",
+    "plain_language": "Applies to online impersonation, phishing, fake social media profiles, or pretending to be a bank official online to steal money.",
+    "example_scenarios": [
+      "Posing as a bank representative over WhatsApp/Email to steal OTPs and money.",
+      "Creating a fake executive profile to induce wire transfers."
+    ],
+    "punishment": "Imprisonment up to 3 years and fine up to ₹1,00,000.",
+    "is_bailable": true,
+    "is_cognizable": true,
+    "ipc_mapping": "IT Act 66D / IPC 419",
+    "related_sections": ["66C", "419", "420"],
+    "category_tags": ["cyber_fraud", "phishing", "it_act"],
+    "jurisdiction_notes": "Cyber Crime Police Station / Magistrate.",
+    "source_reference": "Information Technology Act, 2000",
     "review_status": "reviewed"
   }
 ]

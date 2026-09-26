@@ -11,11 +11,9 @@ import {
   FileText,
   Gavel,
   HelpCircle,
-  Layers3,
   LockKeyhole,
   MessageSquareText,
   Search,
-  ShieldCheck,
   Sparkles,
   Users,
   X
@@ -27,9 +25,10 @@ import type { ComponentType } from "react";
 import type { AppRole } from "@/lib/auth";
 
 type IconType = ComponentType<{ className?: string; "aria-hidden"?: boolean | "true" | "false" }>;
+type PublicRole = Exclude<AppRole, "admin">;
 
 type RoleJourney = {
-  key: AppRole;
+  key: PublicRole;
   label: string;
   title: string;
   summary: string;
@@ -78,17 +77,6 @@ const roleJourneys: RoleJourney[] = [
     href: "/auth/callback?role=lawyer",
     icon: Gavel,
     steps: ["Complete profile", "Get verified", "Review requests", "Accept case", "Update hearing"]
-  },
-  {
-    key: "admin",
-    label: "Admin",
-    title: "Operate the platform with audit visibility",
-    summary:
-      "Verify lawyers, manage legal content, review users, monitor metrics, audit sensitive actions, and inspect notification failures.",
-    cta: "Enter as admin",
-    href: "/auth/callback?role=admin",
-    icon: ShieldCheck,
-    steps: ["Review metrics", "Verify lawyers", "Manage users", "Inspect audit logs", "Resolve failures"]
   }
 ];
 
@@ -96,10 +84,10 @@ const features: Feature[] = [
   {
     key: "laws",
     title: "Law Search",
-    audience: "Citizens and admins",
+    audience: "Citizens",
     description:
-      "Search legal sections by keyword, act, section number, category, and review status. Admins can create and update legal content.",
-    output: "Plain-language legal references and reviewed content records.",
+      "Search legal sections by keyword, act, section number, category, and review status.",
+    output: "Plain-language legal references for understanding the next step.",
     href: "/citizen/laws",
     icon: Search
   },
@@ -139,16 +127,16 @@ const features: Feature[] = [
     audience: "Citizens and lawyers",
     description:
       "Upload private case documents, request OCR, review extracted text, and use signed download links with access checks.",
-    output: "Case documents with malware, OCR, privacy, and audit status.",
+    output: "Case documents with malware, OCR, and privacy status.",
     href: "/citizen/cases",
     icon: FileSearch
   },
   {
     key: "legal-aid",
     title: "Legal Aid",
-    audience: "Citizens, lawyers, admins",
+    audience: "Citizens and lawyers",
     description:
-      "Match eligible cases to verified lawyers, create legal aid requests, and let lawyers accept or decline with audit history.",
+      "Match eligible cases to verified lawyers, create legal aid requests, and let lawyers accept or decline with request history.",
     output: "Transparent legal aid request workflow and case assignment.",
     href: "/lawyer/requests",
     icon: Users
@@ -166,22 +154,12 @@ const features: Feature[] = [
   {
     key: "notifications",
     title: "Notifications",
-    audience: "All roles",
+    audience: "Citizens and lawyers",
     description:
       "Keep legal aid decisions, hearings, RTI actions, and other updates visible in an in-app notification center.",
     output: "Read/unread notification history and delivery status.",
     href: "/notifications",
     icon: Bell
-  },
-  {
-    key: "admin",
-    title: "Admin Controls",
-    audience: "Admins",
-    description:
-      "Monitor metrics, inspect audit logs, verify lawyers, manage users, review legal content, and investigate failed notifications.",
-    output: "Operational visibility across sensitive platform workflows.",
-    href: "/admin/dashboard",
-    icon: Layers3
   }
 ];
 
@@ -189,7 +167,7 @@ const orientationSteps: OrientationStep[] = [
   {
     title: "Choose the workspace that matches your role",
     body:
-      "Themis separates citizen, lawyer, and admin workflows so each user sees only the actions they are allowed to take.",
+      "Themis separates citizen and lawyer workflows so each user sees only the actions they are allowed to take.",
     callout: "Start from the role buttons or sign in screen.",
     icon: Users
   },
@@ -208,17 +186,10 @@ const orientationSteps: OrientationStep[] = [
     icon: Gavel
   },
   {
-    title: "Admins keep the platform accountable",
-    body:
-      "Admins review lawyer verification, user status, legal content, audit logs, metrics, and notification failures.",
-    callout: "Admin actions are audit logged for traceability.",
-    icon: ShieldCheck
-  },
-  {
     title: "Sensitive work is protected",
     body:
-      "Role checks, private document storage, signed download URLs, audit redaction, and readiness checks support pilot deployment.",
-    callout: "Use the production runbook before opening the platform to real users.",
+      "Role checks, private document storage, signed download URLs, and readiness checks keep regular users out of restricted areas.",
+    callout: "Restricted platform operations are available only to authorized staff.",
     icon: LockKeyhole
   }
 ];
@@ -252,11 +223,19 @@ export function LandingPage({
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <section className="relative min-h-[86svh] overflow-hidden bg-slate-950 text-white">
+      <section className="relative isolate min-h-[82svh] overflow-hidden bg-slate-950 text-white">
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:44px_44px]" />
-        <div className="absolute inset-0 opacity-80">
-          <WorkflowScene onSelectFeature={setSelectedFeature} />
-        </div>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-20 right-0 hidden w-[44%] rounded-l-md border-y border-l border-white/10 bg-white/[0.025] lg:block"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute bottom-0 left-0 right-0 h-px bg-cyan-300/20"
+        />
+
+        <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-[56%] bg-slate-950/40 lg:block" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-full bg-[linear-gradient(90deg,rgba(2,6,23,0.9),rgba(2,6,23,0.45)_58%,rgba(2,6,23,0.18))]" />
 
         <nav className="relative z-10 mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-5 md:px-6 lg:px-8">
           <Link className="focus-ring inline-flex items-center gap-3 rounded-md" href="/">
@@ -287,17 +266,17 @@ export function LandingPage({
           </div>
         </nav>
 
-        <div className="relative z-10 mx-auto grid max-w-7xl gap-10 px-4 pb-12 pt-16 md:px-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.95fr)] lg:px-8 lg:pb-16 lg:pt-24">
-          <div className="max-w-3xl">
+        <div className="relative z-10 mx-auto grid max-w-7xl gap-10 px-4 pb-12 pt-14 md:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(380px,0.78fr)] lg:gap-14 lg:px-8 lg:pb-20 lg:pt-24 xl:grid-cols-[minmax(0,1fr)_520px]">
+          <div className="max-w-[720px]">
             <p className="mb-4 inline-flex rounded-md border border-cyan-300/40 bg-cyan-400/10 px-3 py-2 text-sm font-medium text-cyan-100">
-              Guided legal workflows for citizens, lawyers, and admins
+              Guided legal workflows for citizens and lawyers
             </p>
-            <h1 className="text-4xl font-semibold leading-tight md:text-6xl">
+            <h1 className="text-4xl font-semibold leading-tight md:text-6xl lg:max-w-[760px]">
               Move from legal confusion to organized action.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-slate-200 md:text-lg">
               Themis connects legal search, assessments, complaint drafts, cases, hearings,
-              documents, legal aid, RTI drafts, notifications, and audit controls in one workspace.
+              documents, legal aid, RTI drafts, and notifications in one workspace.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <button
@@ -327,7 +306,7 @@ export function LandingPage({
             </div>
           </div>
 
-          <div className="rounded-md border border-white/15 bg-slate-900/80 p-4 shadow-panel backdrop-blur">
+          <div className="relative z-20 w-full max-w-xl justify-self-end rounded-md border border-white/15 bg-slate-900/95 p-4 shadow-panel backdrop-blur">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-sm text-slate-300">Explore by role</p>
@@ -336,7 +315,7 @@ export function LandingPage({
               <SelectedRoleIcon aria-hidden="true" className="h-6 w-6 text-cyan-300" />
             </div>
 
-            <div className="mt-4 grid grid-cols-3 gap-2">
+            <div className="mt-4 grid grid-cols-2 gap-2">
               {roleJourneys.map((role) => {
                 const Icon = role.icon;
                 const active = selectedRole.key === role.key;
@@ -570,41 +549,6 @@ export function LandingPage({
         </div>
       ) : null}
     </main>
-  );
-}
-
-function WorkflowScene({ onSelectFeature }: { onSelectFeature: (feature: Feature) => void }) {
-  const sceneItems = [
-    { feature: features[1], className: "left-[58%] top-[18%]" },
-    { feature: features[2], className: "left-[72%] top-[33%]" },
-    { feature: features[4], className: "left-[53%] top-[55%]" },
-    { feature: features[6], className: "left-[78%] top-[64%]" },
-    { feature: features[8], className: "left-[38%] top-[38%]" }
-  ];
-
-  return (
-    <div className="relative h-full w-full">
-      <div className="absolute bottom-[-12%] right-[-6%] h-[58%] w-[58%] rounded-[999px] border border-cyan-300/20" />
-      <div className="absolute right-[10%] top-[10%] h-[72%] w-[42%] rounded-md border border-white/10 bg-white/[0.03]" />
-      {sceneItems.map(({ feature, className }) => {
-        const Icon = feature.icon;
-
-        return (
-          <button
-            className={`focus-ring absolute hidden min-h-24 w-44 rounded-md border border-white/15 bg-slate-900/90 p-3 text-left text-white shadow-panel backdrop-blur transition hover:border-cyan-300 hover:bg-slate-800 lg:block ${className}`}
-            key={feature.key}
-            onClick={() => onSelectFeature(feature)}
-            type="button"
-          >
-            <span className="flex items-center gap-2 text-sm font-semibold">
-              <Icon aria-hidden="true" className="h-4 w-4 text-cyan-300" />
-              {feature.title}
-            </span>
-            <span className="mt-2 block text-xs leading-5 text-slate-300">{feature.audience}</span>
-          </button>
-        );
-      })}
-    </div>
   );
 }
 

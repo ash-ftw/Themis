@@ -1,11 +1,25 @@
-# Backend Schema
-# Themis
+# Backend Schema Specification
+# Themis — Relational Database Schema & Data Models
 
-## 1. Scope
+## 1. Scope & Target Blueprint Alignment
 
-This document defines the backend data model for Themis. The schema is based on the PRD and is optimized for a PostgreSQL-first modular monolith using SQLAlchemy 2.x and Alembic.
+This document defines the backend relational data model for **Themis**, directly implementing the initial entity model and database schema.
 
-The model separates identity, profiles, legal content, assessments, drafts, cases, hearings, legal aid matching, documents, notifications, audit logs, bookmarks, and operational events.
+Module Ownership:
+- **Backend API & Schema Lead**: **A R Devadathan** (FastAPI services, authentication, REST APIs, database schema DDL, Alembic migrations, Celery task integration).
+- **Document, OCR & Case Engine Lead**: **Amal K R** (MinIO document metadata, signed uploads, OCR status tracking, attorney verifications, and hearing automation).
+
+The schema models 8 core entities:
+1. `Users`: Stores account information and roles (Citizen, Attorney, Coordinator, Administrator).
+2. `Cases`: Represents legal matters tracked through the platform.
+3. `Assessments`: Stores guided assessment responses used to determine legal pathways.
+4. `Documents`: Metadata for files stored in the MinIO document repository with OCR status.
+5. `Generated Documents`: Stores auto-generated editable complaints and RTI applications.
+6. `Attorney Verifications`: Tracks attorney credential verification status (Bar Council ID).
+7. `Hearings`: Records scheduled hearing and case milestone events.
+8. `Audit Logs`: Immutable record of document access and modification events.
+
+---
 
 ## 2. Conventions
 

@@ -49,6 +49,10 @@ class Settings(BaseSettings):
         default_factory=lambda: ["admin@themis.local"],
         description="Emails that should be promoted to admin during profile sync.",
     )
+    smtp_host: str = "localhost"
+    smtp_port: int = 1025
+    smtp_sender: str = "notifications@themis.local"
+
 
 
 @lru_cache
